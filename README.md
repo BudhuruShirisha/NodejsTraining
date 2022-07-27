@@ -17,7 +17,7 @@ app.js file is configuring middlewares functions for users
 In helpers we used to  function parse Json data.
 routes folder we have users.js in that we are checking Validations and getting expected response from the controller and also sorting the data by age and name. 
 controller folder use to get users data from random user generatorapi
-Endpoint: http://localhost:3000/Users/list //for getting default(10) users data from random user generator
+Endpoint: http://localhost:3003/Users/list //for getting default(10) users data from random user generator
 based on how many users we want we can pass as query parameter
-Ex Endpoint: http://localhost:3000/Users/list?count=2
+Ex Endpoint: http://localhost:3003/Users/list?count=2
 
