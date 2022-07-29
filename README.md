@@ -21,3 +21,28 @@ Endpoint: http://localhost:3003/Users/list //for getting default(10) users data 
 based on how many users we want we can pass as query parameter
 Ex Endpoint: http://localhost:3003/Users/list?count=2
 
+/***-------------------------------------------------------------------------------------------------------------------------------**/
+  
+  Task 2: (2022-07-27)
+        
+        a) localhost:3003 should display a page.
+                
+                Enter Valid Email: Text Box
+                Subject: Text Box
+                Message: Text Area
+                
+                Submit Button (Send Email)
+                
+        b) Endpoint :  localhost:3003/sendmail
+                email format validation, all fields are required.
+                Send Email using your gmail credentials.
+        d) If email sent successfully, redirect to localhost:3003/success & show some success message.
+                other wise redirect to localhost:3003/failed & show an error message.
+Add home button in both success & failed pages. 
+  
+  Endpoint:localhost:3003 in which enter details to send the mail
+   Post request: Endpoint:localhost:3003/sendmail
+  validations are added in router file to validate the email using email validator module
+  if it is success it will show success message or it fails shows error message
+  
+  
