@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Nodemailer Email Example</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container"><br />
+        <h1>Send The Email</h1><br />
+        <form action="/sendmail" method="post">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="form-group col-md-4">
+                    <label for="to">To:</label>
+                    <input type="email" class="form-control" name="to" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="form-group col-md-4">
+                    <label for="subject">Subject:</label>
+                    <input type="text" class="form-control" name="subject" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="form-group col-md-4">
+                    <label for="body">Body:</label>
+                    <textarea cols="5" rows="5" class="form-control" name="text" required></textarea >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info"> SendEmail</button>
+                    <a class="btn btn-info" href="/views/success.ejs"> View All</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
