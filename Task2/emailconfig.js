@@ -5,7 +5,7 @@ let config = {
     secure: false,
     requireTLS: true,
     auth: {
-        user: 'mahshaik3@gmail.com',
+        user: 'budhurushirisha97@gmail.com',
         pass: 'tyzperabwdjeljqx'
     }
 }
