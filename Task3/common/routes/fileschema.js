@@ -59,4 +59,3 @@ function Validationcheck(req, res, next) {
         res.send("error");
     }
 }
-router.post("/common/file", Validationcheck, )
