@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "62f4ad9c6b61cac6c5a2d77e"
+  },
+  "code": "00454",
+  "name": "microsoft",
+  "type": "backoffice",
+  "status": "active",
+  "rectype": "organization",
+  "created": "2022-08-11T07:19:55.527Z",
+  "id": "20220801000002"
+}]

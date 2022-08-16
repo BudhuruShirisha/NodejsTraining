@@ -1,0 +1,54 @@
+{
+    "patient": {
+        "rectype": "patient",
+        "language": [
+            "english",
+            "urdu",
+            "hindi",
+            "telugu",
+            "japan"
+        ],
+        "gender": [
+            "male",
+            "female",
+            "others"
+        ]
+    },
+    "organization": {
+        "rectype": "organization",
+        "type": [
+            "backoffice",
+            "clinic",
+            "custom",
+            "lab",
+            "office",
+            "carecenter"
+        ]
+    },
+    "file": {
+        "rectype": "file",
+        "status": {
+            "completed": "completed",
+            "pending": "pending",
+            "error": "error"
+        }
+    },
+    "sequence": {
+        "rectype": "sequence"
+    },
+    "common": {
+        "status": [
+            "active",
+            "inactive"
+        ]
+    },
+    "aws": {
+        "ACCESS_KEY_ID": "AKIAQATBCZB5KED75LXX",
+        "SECRET_ACCESS_KEY": "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",
+        "Bucket_Name": "uploadtoaws"
+    },
+    "db": {
+        "dbname": "Task3",
+        "mongodburl": "mongodb+srv://new_user:dMDhJVcI4LwXaBQc@cluster1.p9bf7wl.mongodb.net/?retryWrites=true&w=majority"
+    }
+}
