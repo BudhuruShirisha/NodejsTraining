@@ -6,37 +6,35 @@ const {
     updateRecord,
     deleteRecord
 } = require("../db/mongodb");
-const emailvalidator = require("email-validator")
-
 const { Utils } = require("../common/utils");
 const utils = new Utils();
+//contactSchema
 const contactSchema = new Schema({
-    id: { type: String },
-    rectype: { type: String },
-    orgid: { type: String },
-    refrectype: {
-        type: String,
-        enum: [config.patient.rectype, config.organization.rectype],
-        required: true
-    },
-    refid: { type: String, required: true },
-    type: {
-        type: String,
-        enum: Object.values(config.contact.type),
-        required: true,
-    },
-    subtype: {
-        type: String,
-        enum: Object.values(config.contact.subtype),
-        required: true,
-    },
-    data: {}
-})
-
+        id: { type: String },
+        rectype: { type: String },
+        orgid: { type: String },
+        refrectype: {
+            type: String,
+            enum: [config.patient.rectype, config.organization.rectype],
+            required: true
+        },
+        refid: { type: String, required: true },
+        type: {
+            type: String,
+            enum: Object.values(config.contact.type),
+            required: true,
+        },
+        subtype: {
+            type: String,
+            enum: Object.values(config.contact.subtype),
+            required: true,
+        },
+        data: {}
+    })
+    //checking validate conditions
 async function validation(contactBody) {
     const { refid, refrectype, type, subtype } = contactBody
     const contData = { refid, refrectype, type, subtype }
-        //check validate conditions
     let errors = contactSchema.validate(contData);
     if (errors.length) {
         errors = errors.map((eRec) => {
@@ -47,25 +45,27 @@ async function validation(contactBody) {
         return true;
     }
 }
+//addAddress to patient or organization
 async function addAddress(contactBody) {
     try {
         contactBody.rectype = config.contact.rectype;
         const { refid, type, refrectype, subtype, data, } = contactBody
 
         await validation(contactBody)
-        const { type: contacttype, subtype: subType } = config.contact
-        if (type != contacttype.address) throw "invalid type";
+        const { type: contactType, subtype: subType } = config.contact
+        if (type != contactType.address) throw "invalid type";
         if (![subType.home, subType.work].includes(subtype)) throw "invalid subtype";
         const orgparams = { rectype: refrectype, id: refid };
-        await getRecord(orgparams)
+        await getRecord(orgparams) //getRecord is to check record is available or not
 
         const params = {
-            data,
-            address: config.contact.address
-        }
+                data,
+                address: config.contact.address
+            }
+            //validating the address
         await utils.validateaddress(params)
         if (refrectype == config.patient.rectype) {
-            const orgid = await utils.getRecOrgId(orgparams);
+            const orgid = await utils.getRecOrgId(orgparams); //if rectype is patient then get organizationid
             contactBody.orgid = orgid;
         }
         const contactresult = await createRecord(contactBody);
@@ -74,12 +74,13 @@ async function addAddress(contactBody) {
         throw error;
     }
 }
+//updating the address for patient or organization
 async function updateAddress(contactBody) {
     try {
         const { id, type, data } = contactBody
 
-        const { type: contacttype, rectype: recType } = config.contact
-        if (type != contacttype.address) throw "invalid type";
+        const { type: contactType, rectype: recType } = config.contact
+        if (type != contactType.address) throw "invalid type";
 
         const payload = { id, body: { type, data } };
         payload.rectype = recType;
@@ -92,6 +93,7 @@ async function updateAddress(contactBody) {
         return contactinfo;
     } catch (error) { throw error }
 }
+//removing the address from patient or organization
 async function removeAddress(contactBody) {
     try {
         const { id } = contactBody
@@ -103,13 +105,14 @@ async function removeAddress(contactBody) {
         throw error;
     }
 }
+//adding the email to patient or organization
 async function addEmail(contactBody) {
     try {
         const { refid, type, subtype, data, refrectype } = contactBody;
         await validation(contactBody);
-        const { type: contacttype, subtype: subType, rectype: recType } = config.contact
+        const { type: contactType, subtype: subType, rectype: recType } = config.contact
         contactBody.rectype = recType;
-        if (type != contacttype.email) throw "invalid type enter email";
+        if (type != contactType.email) throw "invalid type enter email";
         if (![subType.primary, subType.secondary].includes(subtype)) throw "invalid subtype";
 
         const orgparams = { rectype: refrectype, id: refid };
@@ -126,18 +129,21 @@ async function addEmail(contactBody) {
         throw error
     }
 }
+//update  email for patient or organization
 async function updateEmail(contactBody) {
     try {
         const { id, type, data } = contactBody
 
-        const { type: contacttype, rectype: recType } = config.contact
-        if (type != contacttype.email) throw "invalid type";
+        const { type: contactType, rectype: recType } = config.contact
+        if (type != contactType.email) throw "invalid type";
         const payload = { id, body: { type, data } };
         payload.rectype = recType;
         const contactinfo = await updateRecord(payload);
         return contactinfo;
     } catch (error) { throw error }
 }
+
+//removing the email from patient or organization
 async function removeEmail(contactBody) {
     try {
         const { id } = contactBody
@@ -149,13 +155,14 @@ async function removeEmail(contactBody) {
         throw error;
     }
 }
+//adding the phonenum to patient or organization
 async function addPhone(contactBody) {
     try {
         const { refid, type, subtype, data, refrectype } = contactBody;
         await validation(contactBody);
-        const { type: contacttype, subtype: subType, rectype: recType } = config.contact
+        const { type: contactType, subtype: subType, rectype: recType } = config.contact
         contactBody.rectype = recType;
-        if (type != contacttype.phone) throw "invalid type enter email";
+        if (type != contactType.phone) throw "invalid type enter email";
         if (![subType.mobile, subType.personal].includes(subtype)) throw "invalid subtype";
         const orgparams = { rectype: refrectype, id: refid };
 
@@ -171,19 +178,20 @@ async function addPhone(contactBody) {
         throw error
     }
 }
+//updating the phonenum for patient or organization
 async function updatePhone(contactBody) {
     try {
         const { id, type, data } = contactBody
 
-        const { type: contacttype, rectype: recType } = config.contact
-        if (type != contacttype.phone) throw "invalid type";
+        const { type: contactType, rectype: recType } = config.contact
+        if (type != contactType.phone) throw "invalid type";
         const payload = { id, body: { type, data } };
         payload.rectype = recType;
         const contactinfo = await updateRecord(payload);
         return contactinfo;
     } catch (error) { throw error }
 }
-
+//removing the phonenum from patient or organization
 async function removePhone(contactBody) {
     try {
         const { id } = contactBody
@@ -195,14 +203,14 @@ async function removePhone(contactBody) {
         throw error;
     }
 }
-
+//adding the fax to patient or organization
 async function addFax(contactBody) {
     try {
         const { refid, type, subtype, data, refrectype } = contactBody;
         await validation(contactBody);
-        const { type: contacttype, subtype: subType, rectype: recType } = config.contact
+        const { type: contactType, subtype: subType, rectype: recType } = config.contact
         contactBody.rectype = recType;
-        if (type != contacttype.fax) throw "invalid type enter email";
+        if (type != contactType.fax) throw "invalid type enter email";
         if (![subType.home, subType.work].includes(subtype)) throw "invalid subtype";
         const orgparams = { rectype: refrectype, id: refid };
         await getRecord(orgparams);
@@ -218,19 +226,20 @@ async function addFax(contactBody) {
         throw error
     }
 }
+//updating the fax for patient or organization
 async function updateFax(contactBody) {
     try {
         const { id, type, data } = contactBody
 
-        const { type: contacttype, rectype: recType } = config.contact
-        if (type != contacttype.fax) throw "invalid type";
+        const { type: contactType, rectype: recType } = config.contact
+        if (type != contactType.fax) throw "invalid type";
         const payload = { id, body: { type, data } };
         payload.rectype = recType;
         const contactinfo = await updateRecord(payload);
         return contactinfo;
     } catch (error) { throw error }
 }
-
+//removing the fax from patient or organization
 async function removeFax(contactBody) {
     try {
         const { id } = contactBody
@@ -242,7 +251,7 @@ async function removeFax(contactBody) {
         throw error;
     }
 }
-
+// processfun to perform action based on appropriate method
 function processFun(__action) {
 
     const functionMapping = {
@@ -271,12 +280,3 @@ function processFun(__action) {
 module.exports = {
     processFun,
 };
-
-
-/* "removeEmail": removeEmail,
-        "addPhone": addPhone,
-        "updatePhone": updatePhone,
-        "removePhone": removePhone,
-        "addFax": addFax,
-        "updateFax": updateFax,
-        "removeFax": removeFax, */

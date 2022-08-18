@@ -6,7 +6,7 @@ const {
     getRecord,
 } = require("../db/mongodb");
 
-//createRec function used to call createRecord from mongodb file and get inserted response or error
+//creating the patient record 
 async function createRec(req, res) {
     try {
         req.body.rectype = config.patient.rectype;
@@ -17,7 +17,7 @@ async function createRec(req, res) {
     }
 }
 
-//getRec function used to call getRecord from mongodb file and get record response or error
+//getRec is to get the patient record
 async function getRec(req, res) {
     try {
         const { query } = req;
@@ -33,7 +33,7 @@ async function getRec(req, res) {
     }
 }
 
-//updateRec function used to call updateRecord from mongodb file and get updated response or error
+//updateRec is to update the patient record   
 async function updateRec(req, res) {
     try {
         const { query } = req;
@@ -47,8 +47,7 @@ async function updateRec(req, res) {
         res.status(400).json({ status: "Error :", error: error });
     }
 }
-
-//deleteRec function used to call deleteRecord from mongodb file and get deleted response or error
+//deleteRec is to delete patient record
 async function deleteRec(req, res) {
     try {
         const { query } = req;
@@ -61,8 +60,7 @@ async function deleteRec(req, res) {
         res.status(400).json({ status: "Error :", error: error });
     }
 }
-
-//export all functions
+//exporting functions
 module.exports = {
     createRec,
     getRec,

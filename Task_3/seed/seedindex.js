@@ -59,7 +59,7 @@ const organization = [{
     }
 ]
 
-async function addpat() {
+async function addpatient() {
     for (i = 0; i < patientdata.length; i++)
         await addRecord(patientdata[i])
 }
@@ -68,5 +68,5 @@ async function addorg() {
     for (i = 0; i < organization.length; i++)
         await createRecord(organization[i])
 }
-addpat();
+addpatient();
 addorg();

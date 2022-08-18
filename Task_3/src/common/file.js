@@ -6,7 +6,7 @@ const { uploadFile, deleteFile } = require("../aws/s3.js");
 const { Utils } = require("../common/utils");
 
 const utils = new Utils();
-//Schema for file to check type and required fields to validate
+//fileSchema 
 const file = new Schema({
     id: { type: Number },
     rectype: { type: String }, //file,
@@ -46,8 +46,8 @@ function Validation(req, res, next) {
             created,
         },
     } = req;
-    //pass required fields to filedata
-    const fileData = {
+    //pass required fields to fileInfo
+    const fileInfo = {
         id,
         rectype,
         refid,
@@ -62,7 +62,7 @@ function Validation(req, res, next) {
         created,
     };
     //checking  the  validate conditions and send next() middleware
-    let errors = file.validate(fileData);
+    let errors = file.validate(fileInfo);
     if (errors.length) {
         errors = errors.map((eRec) => {
             return { path: eRec.path, message: eRec.message };
@@ -73,7 +73,7 @@ function Validation(req, res, next) {
     }
 }
 
-//addFile function is used and files into mongodb files collection
+//addFile  into mongodb 
 async function addFile(req, res) {
     try {
         const rectype = config.file.rectype;
@@ -82,8 +82,8 @@ async function addFile(req, res) {
             body: { refid, refrectype },
         } = req;
         const fileContent = utils.getFileContent(filepath).toString("utf-8");
-        const filedata = { filename: originalname, fileContent };
-        const uploadInfo = await uploadFile(filedata);
+        const fileInfo = { filename: originalname, fileContent };
+        const uploadInfo = await uploadFile(fileInfo);
         const url = uploadInfo.Location;
         const name = path.parse(filename).name;
         const orgparams = { rectype: refrectype, id: refid };
@@ -103,15 +103,15 @@ async function addFile(req, res) {
             const orgid = await utils.getRecOrgId(orgparams);
             addpayload.orgid = orgid;
         }
-        const fileinfo = await createRecord(addpayload); //calling createRecord function and get recorded information from mongodb file
+        const fileinfo = await createRecord(addpayload); // createRecord into mongodb 
 
-        res.status(200).json({ status: "Success", results: fileinfo }); //get success and results response if record is  inserted successfully
+        res.status(200).json({ status: "Success", results: fileinfo }); // success!  if record is  inserted successfully
     } catch (error) {
-        res.status(400).json({ status: "Error :", error: error.message }); //get error status if error while occurs
+        res.status(400).json({ status: "Error :", error: error.message }); // error!  if error occurs
     }
 }
 
-//deleteFile function is used to delete the file
+//  Filedelete to delete the file
 async function Filedelete(req, res) {
     try {
         const { query } = req;
@@ -121,12 +121,12 @@ async function Filedelete(req, res) {
         const originalname = await utils.getoriginalname(payload);
         const datainfo = deleteFile(originalname);
         console.log(datainfo);
-        const data = await deleteRecord(payload); //calling deleterecord function from mongodb file
-        res.status(200).json({ status: "Success", results: data }); //get success and results response if record is successfully deleted
+        const data = await deleteRecord(payload); // deleterecord  from mongodb 
+        res.status(200).json({ status: "Success", results: data }); // send success  if record is successfully deleted
     } catch (error) {
         console.log("Error :" + error);
-        res.status(400).json({ status: "Error :", error: error.message }); //get error status if error while occurs
+        res.status(400).json({ status: "Error :", error: error.message }); // send error if error  occurs
     }
 }
 
-module.exports = { Validation, addFile, Filedelete }; //export all functions
+module.exports = { Validation, addFile, Filedelete };
