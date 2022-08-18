@@ -42,6 +42,21 @@
             "inactive"
         ]
     },
+    "contact": {
+        "rectype": "contact",
+        "type": {
+            "address": "address",
+            "email": "email",
+            "fax": "fax",
+            "phone": "phone"
+        },
+        "faxRegEx": "^\\+[0-9]{1,3}-[0-9]{3}-[0-9]{7}$",
+        "number": "^\\d{10}$",
+        "subtype": { "home": "home", "work": "work", "mobile": "mobile", "personal": "personal", "primary": "primary", "secondary": "secondary" },
+        "address": ["line1", "line2", "city", "state", "zip"]
+
+    },
+
     "aws": {
         "ACCESS_KEY_ID": "AKIAQATBCZB5KED75LXX",
         "SECRET_ACCESS_KEY": "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",

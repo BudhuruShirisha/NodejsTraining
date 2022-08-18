@@ -1,410 +1,1099 @@
 {
-	"info": {
-		"_postman_id": "ed882a04-6d29-40f8-a7a9-6bf60d78834c",
-		"name": "Task3",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18425557"
-	},
-	"item": [
-		{
-			"name": "patient",
-			"item": [
-				{
-					"name": "file",
-					"item": [
-						{
-							"name": "add patient file",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "file",
-											"type": "file",
-											"src": "/C:/Users/mahshaik/source/repos/NodeJsRepo/NodeJsTask3/filedata/patient_20220801000001.json"
-										},
-										{
-											"key": "refrectype",
-											"value": "patient",
-											"type": "text"
-										},
-										{
-											"key": "refid",
-											"value": "20220801000001",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "http://localhost:8008/common/uploadfile",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8008",
-									"path": [
-										"common",
-										"uploadfile"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "delete patient file",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8008/common/deletefile?id=20220801000004",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8008",
-									"path": [
-										"common",
-										"deletefile"
-									],
-									"query": [
-										{
-											"key": "id",
-											"value": "20220801000004"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "create patient",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"orgid\":\"20220801000000\",\r\n  \"firstname\": \"surya\",\r\n  \"lastname\": \"sai\",\r\n  \"gender\": \"male\",\r\n  \"dob\": \"1988-09-07\",\r\n  \"language\": \"english\",\r\n  \"status\":\"active\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8008/patient/create",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"patient",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get patient details",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8008/patient/get?id=20220801000001",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"patient",
-								"get"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "20220801000001"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update patient",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"orgid\":\"20220801000013\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8008/patient/update?id=20220801000015",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"patient",
-								"update"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "20220801000015"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete patient",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8008/patient/delete?id=20220801000007",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"patient",
-								"delete"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "20220801000007"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "organization",
-			"item": [
-				{
-					"name": "contact",
-					"item": []
-				},
-				{
-					"name": "file",
-					"item": [
-						{
-							"name": "organization upload File",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "file",
-											"type": "file",
-											"src": "/C:/Users/mahshaik/source/repos/NodeJsRepo/NodeJsTask3/filedata/organization_20220801000000.json"
-										},
-										{
-											"key": "refid",
-											"value": "20220801000000",
-											"type": "text"
-										},
-										{
-											"key": "refrectype",
-											"value": "organization",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "http://localhost:8008/common/uploadfile",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8008",
-									"path": [
-										"common",
-										"uploadfile"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "delete file",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8008/common/deletefile?id=20220801000005",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8008",
-									"path": [
-										"common",
-										"deletefile"
-									],
-									"query": [
-										{
-											"key": "id",
-											"value": "20220801000005"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "create Organization",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"code\":\"00A1\",\r\n    \"name\":\"innominds\",\r\n    \"type\":\"backoffice\",\r\n    \"status\":\"active\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8008/organization/create",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"organization",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get Organization details",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8008/organization/get?id=20220801000009",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"organization",
-								"get"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "20220801000009"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update organization",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"code\":\"00b2\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8008/organization/update?id=20220801000009",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"organization",
-								"update"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "20220801000009"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete Organization",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8008/organization/delete?id=20220801000009",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8008",
-							"path": [
-								"organization",
-								"delete"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "20220801000009"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	]
+    "info": {
+        "_postman_id": "0ec79a28-0fcb-49b6-9152-e9ea917a5ecf",
+        "name": "Task3",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "22550061"
+    },
+    "item": [{
+            "name": "patient",
+            "item": [{
+                    "name": "file",
+                    "item": [{
+                            "name": "add patient file",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [{
+                                            "key": "file",
+                                            "type": "file",
+                                            "src": "/C:/Users/sbudhuru/Pictures/Task_3/filedata/patient_000.json"
+                                        },
+                                        {
+                                            "key": "refrectype",
+                                            "value": "patient",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "refid",
+                                            "value": "20220801000000",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/common/uploadfile",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "common",
+                                        "uploadfile"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "delete patient file",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:5000/common/deletefile?id=20220801000008",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "common",
+                                        "deletefile"
+                                    ],
+                                    "query": [{
+                                        "key": "id",
+                                        "value": "20220801000008"
+                                    }]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "create patient",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"orgid\":\"20220801000009\",\r\n  \"firstname\": \"kolla\",\r\n  \"lastname\":\"chinnu\",\r\n  \"gender\": \"female\",\r\n  \"dob\": \"26-09-1998\",\r\n  \"language\": \"telugu\",\r\n  \"status\":\"active\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/patient/create",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "patient",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "get patient details",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/patient/get?id=20220801000000",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "patient",
+                                "get"
+                            ],
+                            "query": [{
+                                "key": "id",
+                                "value": "20220801000000"
+                            }]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "update patient",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"orgid\":\"20220801000001\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/patient/update?id=20220801000000",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "patient",
+                                "update"
+                            ],
+                            "query": [{
+                                "key": "id",
+                                "value": "20220801000000"
+                            }]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "delete patient",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:5000/patient/delete?id=20220801000007",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "patient",
+                                "delete"
+                            ],
+                            "query": [{
+                                "key": "id",
+                                "value": "20220801000007"
+                            }]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "organization",
+            "item": [{
+                    "name": "file",
+                    "item": [{
+                            "name": "organization upload File",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [{
+                                            "key": "file",
+                                            "type": "file",
+                                            "src": "/C:/Users/sbudhuru/Pictures/Task_3/filedata/organization_001.json"
+                                        },
+                                        {
+                                            "key": "refid",
+                                            "value": "20220801000001",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "refrectype",
+                                            "value": "organization",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/common/uploadfile",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "common",
+                                        "uploadfile"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "delete file",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:5000/common/deletefile?id=20220801000005",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "common",
+                                        "deletefile"
+                                    ],
+                                    "query": [{
+                                        "key": "id",
+                                        "value": "20220801000005"
+                                    }]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "create Organization",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"code\":\"00A1\",\r\n    \"name\":\"innominds\",\r\n    \"type\":\"backoffice\",\r\n    \"status\":\"active\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/organization/create",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "organization",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "get Organization details",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:5000/organization/get?id=20220801000009",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "organization",
+                                "get"
+                            ],
+                            "query": [{
+                                "key": "id",
+                                "value": "20220801000009"
+                            }]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "update organization",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"code\":\"kkjehfk\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/organization/update?id=20220801000006",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "organization",
+                                "update"
+                            ],
+                            "query": [{
+                                "key": "id",
+                                "value": "20220801000006"
+                            }]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "delete Organization",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:5000/organization/delete?id=20220801000007",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "organization",
+                                "delete"
+                            ],
+                            "query": [{
+                                "key": "id",
+                                "value": "20220801000007"
+                            }]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Contact",
+            "item": [{
+                    "name": "organizationEmail",
+                    "item": [{
+                            "name": "addEmail",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n\r\n    \"__action\":\"addEmail\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000001\",\r\n    \"type\":\"email\",\r\n    \"subtype\":\"primary\",\r\n    \"data\":\"budhurushirisha@gmail.com\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updateemail",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \r\n   \"__action\":\"updateEmail\",\r\n    \"body\":{\r\n    \"id\":\"20220801000045\",\r\n    \"type\":\"email\",\r\n    \"data\":\"shirisha1@gmail.com\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ],
+                                    "query": [{
+                                        "key": "id",
+                                        "value": "20220801000017",
+                                        "disabled": true
+                                    }]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "deleteEmail",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeEmail\",\r\n    \"body\":{\r\n        \"id\":\"20220801000047\"\r\n    }\r\n    \r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "organizationaddress",
+                    "item": [{
+                            "name": "deleteaddress",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeAddress\",\r\n    \"body\":{\r\n        \"id\":\"20220801000034\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "addaddress",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"addAddress\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000009\",\r\n    \"type\":\"address\",\r\n    \"subtype\":\"home\",\r\n    \r\n    \"data\": \r\n    {\r\n      \"line1\":\"2\",\r\n        \"line2\":\"phpcolony\",\r\n        \"city\":\"mahabubnagar\",\r\n        \"state\":\"telangana\",\r\n        \"zip\":\"509203\"\r\n      \r\n    }\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "update address",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"updateAddress\",\r\n    \"body\":{\r\n    \"id\":\"20220801000044\",\r\n    \"type\":\"address\",\r\n    \r\n    \"data\": \r\n    {\r\n    \"line1\":\"23\",\r\n        \"line2\":\"phpcolony\",\r\n        \"city\":\"mahabubnagar\",\r\n        \"state\":\"telangana\",\r\n        \"zip\":\"509893\"\r\n    }\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Patientaddress",
+                    "item": [{
+                            "name": "addAddress",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"addAddress\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000000\",\r\n    \"type\":\"address\",\r\n    \"subtype\":\"work\",\r\n    \r\n    \"data\": \r\n    {\r\n      \"line1\":\"2-5-72\",\r\n        \"line2\":\"hanumannagar\",\r\n        \"city\":\"warangal\",\r\n        \"state\":\"telangana\",\r\n        \"zip\":\"5000181\"\r\n      \r\n    }\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updateAddress",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n   \"__action\":\"updateAddress\",\r\n    \"body\":{\r\n    \"id\":\"20220801000037\",\r\n    \"type\":\"address\",\r\n  \r\n    \r\n    \"data\": \r\n    {\r\n      \"line1\":\"2-45\",\r\n        \"line2\":\"sairamcolony\",\r\n        \"city\":\"hyderabad\",\r\n        \"state\":\"telangana\",\r\n        \"zip\":\"509872\"\r\n    }\r\n    }\r\n  \r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "DeleteAddress",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeAddress\",\r\n    \"body\":{\r\n        \"id\":\"20220801000038\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "patientEmail",
+                    "item": [{
+                            "name": "addEmail",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n\r\n    \"__action\":\"addEmail\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000003\",\r\n    \"type\":\"email\",\r\n    \"subtype\":\"primary\",\r\n    \"data\":\"budhurushirisha12@gmail.com\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updateEmail",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"updateEmail\",\r\n    \"body\":{\r\n    \"id\":\"20220801000059\",\r\n    \"type\":\"email\",\r\n    \"subtype\":\"secondary\",\r\n    \"data\":\"shirisha1123@gmail.com\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "deleteEmail",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeEmail\",\r\n    \"body\":{\r\n        \"id\":\"20220801000059\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "organizationnumber",
+                    "item": [{
+                            "name": "addphone",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updatephone",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n     \"__action\":\"updateEmail\",\r\n    \"body\":{\r\n    \"id\":\"20220801000045\",\r\n    \"type\":\"email\",\r\n    \"subtype\":\"primary\",\r\n    \"data\":\"shirisha1@gmail.com\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "deletephone",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeEmail\",\r\n    \"body\":{\r\n        \"id\":\"20220801000047\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "patientNumber",
+                    "item": [{
+                            "name": "addphone",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n     \"__action\":\"addEmail\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000003\",\r\n    \"type\":\"phone\",\r\n    \"subtype\":\"mobile\",\r\n    \"data\":9660111942\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updatephone",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"updatePhone\",\r\n    \"body\":{\r\n    \"id\":\"\",\r\n    \"type\":\"phone\",\r\n    \"data\":9550616434\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "deletephone",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeEmail\",\r\n    \"body\":{\r\n        \"id\":\"20220801000057\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "organizationFax",
+                    "item": [{
+                            "name": "addFax",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"addFax\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000009\",\r\n    \"type\":\"fax\",\r\n    \"subtype\":\"home\",\r\n    \"data\":\"+1252890\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updatefax",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n     \r\n   \"__action\":\"updateFax\",\r\n    \"body\":{\r\n    \"id\":\"20220801000060\",\r\n    \"type\":\"fax\",\r\n    \"data\":\"+123-45-5462463\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "deletefax",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeEmail\",\r\n    \"body\":{\r\n        \"id\":\"20220801000047\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/organization/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "organization",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "PatientFax",
+                    "item": [{
+                            "name": "addFax",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n     \"__action\":\"addFax\",\r\n    \"body\":{\r\n    \"refid\":\"20220801000003\",\r\n    \"type\":\"fax\",\r\n    \"subtype\":\"home\",\r\n    \"data\":\"+134-325-4254354\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "updateFax",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "deleteFax",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\r\n    \"__action\":\"removeFax\",\r\n    \"body\":{\r\n        \"id\":\"20220801000074\"\r\n    }\r\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "http://localhost:5000/patient/contact",
+                                    "protocol": "http",
+                                    "host": [
+                                        "localhost"
+                                    ],
+                                    "port": "5000",
+                                    "path": [
+                                        "patient",
+                                        "contact"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

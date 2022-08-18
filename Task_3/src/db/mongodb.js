@@ -27,7 +27,7 @@ async function getNextSequenceValue() {
 
     const collname = config.sequence.rectype; //getting collection name from config file
     const sequenceDoc = await db.collection(collname).findOneAndUpdate({ id: "0" }, { $inc: { data: 1 } }); //find and update sequence values
-    console.log("seq value", sequenceDoc.value.data.toString());
+
     return sequenceDoc.value.data.toString();
 }
 
@@ -35,15 +35,15 @@ async function getNextSequenceValue() {
 async function createRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
-            console.log(item);
+
             item.created = utils.getCurrentDateTime(); //getCurrentDateTime() is used to get current data and time from Utils file
 
             const collname = item.rectype; //collection name
             item.id = await getNextSequenceValue(); //find new value for id
-            console.log("generated id:  ", item.id);
+
             const db = await dbConnection();
             const newRec = await db.collection(collname).insertOne(item); //insert record into database
-            console.log("recorded data: ", newRec);
+
             resolve(item);
         } catch (error) {
             reject(error);
@@ -75,11 +75,10 @@ async function updateRecord(item) {
         try {
 
             const { rectype, id, body } = item; //take item object and pass required values
+            console.log(rectype)
             const db = await dbConnection();
             const collname = rectype;
-            const newRec = await db
-                .collection(collname)
-                .updateOne({ id: id }, { $set: body }); //find the id and update the record
+            const newRec = await db.collection(collname).updateOne({ id: id }, { $set: body }); //find the id and update the record
             if (!newRec.modifiedCount) {
                 throw `Record is Not Found!`;
             }
@@ -94,13 +93,16 @@ async function updateRecord(item) {
 async function deleteRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
+            console.log("item", item)
             const { rectype, ...restParams } = item; //pass rectype and restparams to get data from collections
             const db = await dbConnection();
             const collname = rectype; //collection name
-            const result = await db.collection(collname).deleteOne(restParams); //find and update the selected id
+            console.log("rest", restParams)
+            const result = await db.collection(collname).deleteOne(restParams);
             if (!result.deletedCount) {
                 throw `Record is Not Found!`;
             }
+            console.log(result);
             resolve(result);
         } catch (error) {
             reject(error);
