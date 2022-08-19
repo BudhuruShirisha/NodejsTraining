@@ -13,11 +13,12 @@ async function uploadFile(file) {
         Key: filename, // File name you want to save as in S3
         Body: fileContent,
     };
+
     // Upload files to the s3 bucket
     const uploadinfo = await s3.upload(params).promise();
-    console.log("upload info: ", uploadinfo);
     return uploadinfo;
 }
+
 //delete file from s3 bucket
 async function deleteFile(originalname) {
     try {
@@ -29,7 +30,6 @@ async function deleteFile(originalname) {
 
         return fileinfo;
     } catch (error) {
-        console.log("Error :" + error);
         throw error;
     }
 }

@@ -215,7 +215,6 @@ async function addFax(contactBody) {
         const orgparams = { rectype: refrectype, id: refid };
         await getRecord(orgparams);
         await utils.validateFax(data);
-        console.log(await utils.validateFax(data));
         if (refrectype == config.patient.rectype) {
             const orgid = await utils.getRecOrgId(orgparams);
             contactBody.orgid = orgid;

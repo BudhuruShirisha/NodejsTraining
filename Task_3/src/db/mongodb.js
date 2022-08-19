@@ -18,6 +18,7 @@ async function dbConnection() {
         return db;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 //getNextSequenceValue to get sequence id
@@ -68,7 +69,6 @@ async function updateRecord(item) {
         try {
 
             const { rectype, id, body } = item;
-            console.log(rectype)
             const db = await dbConnection();
             const collname = rectype;
             const newRec = await db.collection(collname).updateOne({ id: id }, { $set: body });
@@ -86,16 +86,13 @@ async function updateRecord(item) {
 async function deleteRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
-            console.log("item", item)
             const { rectype, ...restParams } = item;
             const db = await dbConnection();
             const collname = rectype;
-            console.log("rest", restParams)
             const result = await db.collection(collname).deleteOne(restParams);
             if (!result.deletedCount) {
                 throw `Record is Not Found!`;
             }
-            console.log(result);
             resolve(result);
         } catch (error) {
             reject(error);

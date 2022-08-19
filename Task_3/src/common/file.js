@@ -123,15 +123,12 @@ async function Filedelete(req, res) {
     try {
         const { query } = req;
         const payload = query;
-        console.log(payload);
         payload.rectype = config.file.rectype;
         const originalname = await utils.getoriginalname(payload);
         const datainfo = deleteFile(originalname);
-        console.log(datainfo);
         const data = await deleteRecord(payload); // deleterecord from mongodb 
         res.status(200).json({ status: "Success", results: data }); //success  if record is successfully deleted
     } catch (error) {
-        console.log("Error :" + error);
         res.status(400).json({ status: "Error :", error: error.message }); // error status if error occurs
     }
 }

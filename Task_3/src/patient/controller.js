@@ -5,7 +5,8 @@ const {
     deleteRecord,
     getRecord,
 } = require("../db/mongodb");
-
+const { Utils } = require("../common/utils");
+const utils = new Utils();
 //creating the patient record 
 async function createRec(req, res) {
     try {
@@ -22,11 +23,8 @@ async function getRec(req, res) {
     try {
         const { query } = req;
         const payload = query;
-        console.log(payload);
         payload.rectype = config.patient.rectype;
         const patientInfo = await getRecord(payload);
-        console.log(patientInfo);
-
         res.status(200).json({ status: "Success", results: patientInfo });
     } catch (error) {
         res.status(400).json({ status: "Error :", error: error });
@@ -40,8 +38,10 @@ async function updateRec(req, res) {
         const payload = query;
         payload.rectype = config.patient.rectype;
         payload.body = req.body;
+        if (req.body.status == config.common.status.inactive) {
+            req.body.dateinactivate = utils.getCurrentDateTime();
+        }
         const patientInfo = await updateRecord(payload);
-        console.log(patientInfo);
         res.status(200).json({ status: "Success", results: patientInfo });
     } catch (error) {
         res.status(400).json({ status: "Error :", error: error });
@@ -53,7 +53,6 @@ async function deleteRec(req, res) {
         const { query } = req;
         const payload = query;
         payload.rectype = config.patient.rectype;
-        console.log(payload)
         const patientInfo = await deleteRecord(payload);
         res.status(200).json({ status: "Success", results: patientInfo });
     } catch (error) {

@@ -1,9 +1,10 @@
 const fs = require("fs");
+const bcrypt = require("bcryptjs");
 const emailvalidator = require("email-validator")
 const config = require("../config/app.sepc.json");
 const validatePhoneNumber = new RegExp(config.contact.number);
 const validatefax = new RegExp(config.contact.faxRegEx);
-
+const validatedob = new RegExp(config.common.dobformat);
 
 class Utils {
     //getCurrentDateTime is to get current datetime
@@ -21,9 +22,7 @@ class Utils {
                 getRecord
             } = require("../db/mongodb.js"); //getrecord from the mongodb file
             const { id, rectype } = params;
-
             const orgInfo = await getRecord({ id, rectype });
-            console.log(orgInfo);
             if (!orgInfo.length) {
                 throw `Invalid ${rectype} Id`;
             }
@@ -35,9 +34,7 @@ class Utils {
                 getRecord
             } = require("../db/mongodb.js");
             const { id, rectype } = params;
-            console.log(id);
             const orgInfo = await getRecord({ id, rectype });
-            console.log(orgInfo);
             if (!orgInfo.length) {
                 throw `Invalid ${rectype} Id`;
             }
@@ -59,7 +56,6 @@ class Utils {
         //to validate the email
     async emailValidation(data) {
             if (emailvalidator.validate(data)) {
-                console.log("1");
                 return true;
             } else {
                 throw "invalid email";
@@ -81,7 +77,25 @@ class Utils {
         } else
             return true;
     }
-}
+    async validateDob(dob) {
+        if (!validatedob.test(dob)) {
+            throw "Enter valid dob in YYYY-MM-DD !";
+        } else
+            return true;
+    }
+    async getencrypted(password) {
+        return new Promise(async(resolve, reject) => {
+            try {
+                bcrypt.hash(password, 8, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                })
+            } catch (err) {
+                throw err;
+            }
 
+        })
+    }
+}
 
 module.exports = { Utils };

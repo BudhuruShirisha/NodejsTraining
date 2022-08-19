@@ -16,7 +16,7 @@ const officeSchema = new Schema({
     },
     status: {
         type: String,
-        enum: config.common.status,
+        enum: [config.common.status.active, config.common.status.inactive],
         required: true,
     },
 

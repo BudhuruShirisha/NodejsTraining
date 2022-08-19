@@ -1,4 +1,7 @@
 {
+    "user": {
+        "rectype": "user"
+    },
     "patient": {
         "rectype": "patient",
         "language": [
@@ -7,12 +10,8 @@
             "hindi",
             "telugu",
             "japan"
-        ],
-        "gender": [
-            "male",
-            "female",
-            "others"
         ]
+
     },
     "organization": {
         "rectype": "organization",
@@ -37,10 +36,16 @@
         "rectype": "sequence"
     },
     "common": {
-        "status": [
-            "active",
-            "inactive"
-        ]
+        "status": {
+            "active": "active",
+            "inactive": "inactive"
+        },
+        "gender": [
+            "male",
+            "female",
+            "others"
+        ],
+        "dobformat": "^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$"
     },
     "contact": {
         "rectype": "contact",
@@ -55,6 +60,10 @@
         "subtype": { "home": "home", "work": "work", "mobile": "mobile", "personal": "personal", "primary": "primary", "secondary": "secondary" },
         "address": ["line1", "line2", "city", "state", "zip"]
 
+    },
+    "authenticate": {
+        "rectype": "authenticate",
+        "refrectype": ["user"]
     },
 
     "aws": {
