@@ -24,7 +24,6 @@ router.post("/contact", async(req, res) => {
         const processFunction = processFun(__action);
         const contactBody = req.body.body || {};
         contactBody.refrectype = config.patient.rectype;;
-        console.log(contactBody.refrectype)
         const result = await processFunction(contactBody);
         res.status(200).json({ status: "Success", results: result });
     } catch (error) {

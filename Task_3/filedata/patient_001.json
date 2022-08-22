@@ -1,0 +1,15 @@
+[{
+  "_id": {
+    "$oid": "62ff3937a764efe07305345b"
+  },
+  "orgid": "20220801000009",
+  "firstname": "budhuru",
+  "lastname": "shirisha",
+  "gender": "female",
+  "dob": "1948-14-22",
+  "status": "inactive",
+  "rectype": "patient",
+  "created": "2022-08-19T07:18:14.335Z",
+  "id": "20220801000077",
+  "dateinactivate": "2022-08-19T10:01:53.415Z"
+}]

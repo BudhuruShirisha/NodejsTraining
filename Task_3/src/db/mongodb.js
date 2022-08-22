@@ -53,8 +53,10 @@ async function getRecord(item) {
             const db = await dbConnection();
             const collname = rectype;
             const getRec = await db.collection(collname).find(restParams).toArray();
+
             if (!getRec.length) {
-                throw `Record is Not Found!`;
+                //throw `Record is Not Found!`;
+                resolve([false, `Record is Not Found!`]);
             }
             resolve(getRec);
         } catch (error) {

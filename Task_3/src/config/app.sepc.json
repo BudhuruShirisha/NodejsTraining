@@ -67,9 +67,9 @@
     },
 
     "aws": {
-        "ACCESS_KEY_ID": "AKIAQATBCZB5KED75LXX",
-        "SECRET_ACCESS_KEY": "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",
-        "Bucket_Name": "uploadtoaws"
+        "ACCESS_KEY_ID": "AKIAQATBCZB5GKYGLPG2",
+        "SECRET_ACCESS_KEY": "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",
+        "Bucket_Name": "filesuploadtoaws"
     },
     "db": {
         "dbname": "Task3",

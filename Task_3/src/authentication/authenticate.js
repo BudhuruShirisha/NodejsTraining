@@ -4,6 +4,7 @@ const config = require("../config/app.sepc.json");
 const {
     createRecord,
     getRecord,
+    deleteRecord,
 } = require("../db/mongodb");
 const utils = new Utils();
 const authenticate = new Schema({
@@ -46,22 +47,24 @@ async function authValidation(req, res, next) {
 async function setAuth(payload) {
     try {
         const { refid, refrectype, data } = payload;
+        payload.rectype = config.authenticate.rectype;
         data.password = await utils.getencrypted(data.password);
-        const orgparams = { rectype: refrectype, id: refid };
-        await getRecord(orgparams)
+        const authparams = { rectype: config.authenticate.rectype, refid };
+        const orgparams = { rectype: refrectype, id: refid }
+        await getRecord(orgparams);
         if (refrectype == config.user.rectype) {
             const orgid = await utils.getRecOrgId(orgparams); //if rectype is patient then get organizationid
             payload.orgid = orgid;
         }
-        payload.rectype = config.authenticate.rectype;
+        const result = await getRecord(authparams)
+        if (result[0]) {
+            const delet1 = await deleteRecord(authparams);
+            console.log("deleterecord", delet1)
+        }
         const info = await createRecord(payload);
         return info;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
-
-
-
-
 module.exports = { authValidation, setAuth }

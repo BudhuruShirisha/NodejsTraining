@@ -17,7 +17,7 @@ const file = new Schema({
         required: true,
     },
     orgid: { type: String },
-    status: { type: String, enum: config.file.status },
+    status: { type: String, enum: [config.file.status.pending, config.file.status.completed], },
     url: { type: String }, //s3 URL
     name: { type: String },
     originalname: { type: String },
@@ -80,10 +80,7 @@ async function addFile(req, res) {
             file: { originalname, mimetype: type, filename, size, path: filepath },
             body: { refid, refrectype },
         } = req;
-
-
         const name = path.parse(filename).name;
-
         const status = config.file.status.completed;
         const addpayload = {
             rectype,
@@ -95,6 +92,7 @@ async function addFile(req, res) {
             size,
             status,
         };
+
         //check if refrectype is patient or not, if patient then find orgid
         if (refrectype == config.patient.rectype) {
             const orgparams = { rectype: refrectype, id: refid };
@@ -102,11 +100,11 @@ async function addFile(req, res) {
             addpayload.orgid = orgid;
         }
 
-
         const fileContent = utils.getFileContent(filepath);
         const filedata = { filename: originalname, fileContent };
         // upload file into s3bucket
         const uploadInfo = await uploadFile(filedata);
+
         // url from s3bucket 
         addpayload.url = uploadInfo.Location;
 
