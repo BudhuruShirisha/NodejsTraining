@@ -52,13 +52,8 @@ async function getRecord(item) {
             const { rectype, ...restParams } = item; // rectype and restparams to get data from collections
             const db = await dbConnection();
             const collname = rectype;
-            const getRec = await db.collection(collname).find(restParams).toArray();
-
-            if (!getRec.length) {
-                //throw `Record is Not Found!`;
-                resolve([false, `Record is Not Found!`]);
-            }
-            resolve(getRec);
+            const recList = await db.collection(collname).find(restParams).toArray();
+            resolve(recList);
         } catch (error) {
             reject(error);
         }
@@ -69,7 +64,7 @@ async function getRecord(item) {
 async function updateRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
-
+            console.log("erwe", item)
             const { rectype, id, body } = item;
             const db = await dbConnection();
             const collname = rectype;
@@ -88,10 +83,10 @@ async function updateRecord(item) {
 async function deleteRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
-            const { rectype, ...restParams } = item;
+            const { rectype, id } = item;
             const db = await dbConnection();
             const collname = rectype;
-            const result = await db.collection(collname).deleteOne(restParams);
+            const result = await db.collection(collname).deleteOne({ id });
             if (!result.deletedCount) {
                 throw `Record is Not Found!`;
             }

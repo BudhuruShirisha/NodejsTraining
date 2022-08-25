@@ -5,11 +5,18 @@ const {
     deleteRecord,
     getRecord,
 } = require("../db/mongodb");
+
 const { Utils } = require("../common/utils");
 const utils = new Utils();
 //creating the patient record 
 async function createRec(req, res) {
     try {
+        const { orgid, dob } = req.body;
+        const orgparams = { id: orgid, rectype: config.organization.rectype, status: config.common.status.active }
+        const orgdata = await getRecord(orgparams);
+        if (!orgdata.length) { throw "invalid organization/inactive" }
+        utils.validateDob(dob);
+        req.body.createdby = req.session.id;
         req.body.rectype = config.patient.rectype;
         const patientInfo = await createRecord(req.body);
         res.status(200).json({ status: "Success", results: patientInfo });

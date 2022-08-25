@@ -1,7 +1,9 @@
 const fs = require("fs");
-const bcrypt = require("bcryptjs");
+//const bcrypt = require("bcryptjs");
 const emailvalidator = require("email-validator")
 const config = require("../config/app.sepc.json");
+const md5 = require("md5");
+const jwt = require("jsonwebtoken");
 const validatePhoneNumber = new RegExp(config.contact.number);
 const validatefax = new RegExp(config.contact.faxRegEx);
 const validatedob = new RegExp(config.common.dobformat);
@@ -41,7 +43,7 @@ class Utils {
             return orgInfo[0].originalname;
         }
         //to validate the address
-    async validateaddress(params) {
+    validateaddress(params) {
             const {
                 data,
                 address
@@ -54,7 +56,7 @@ class Utils {
             return true;
         }
         //to validate the email
-    async emailValidation(data) {
+    emailValidation(data) {
             if (emailvalidator.validate(data)) {
                 return true;
             } else {
@@ -62,7 +64,7 @@ class Utils {
             }
         }
         //to validate the phone
-    async validatephone(params) {
+    validatephone(params) {
             if (!validatePhoneNumber.test(params)) {
                 throw "Enter valid Phone Number!";
 
@@ -71,31 +73,37 @@ class Utils {
             }
         }
         //to validate the fax
-    async validateFax(params) {
+    validateFax(params) {
         if (!validatefax.test(params)) {
             throw "Enter valid fax Number!";
         } else
             return true;
     }
-    async validateDob(dob) {
+    validateDob(dob) {
+
         if (!validatedob.test(dob)) {
             throw "Enter valid dob in YYYY-MM-DD !";
         } else
             return true;
     }
-    async getencrypted(password) {
-        return new Promise(async(resolve, reject) => {
-            try {
-                bcrypt.hash(password, 8, (err, result) => {
-                    if (err) reject(err);
-                    resolve(result);
-                })
-            } catch (err) {
-                throw err;
-            }
-
-        })
+    MD5(text) {
+        return md5(text);
     }
+    jwtToken(tokenParams) {
+        const gentoken = jwt.sign(tokenParams, config.key.secret_key, { expiresIn: config.key.exphrs })
+        return gentoken;
+    }
+    verifyJwtToken(token) {
+        try {
+            const decoded = jwt.verify(token, config.key.secret_key);
+            return decoded;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+
+
 }
 
 module.exports = { Utils };

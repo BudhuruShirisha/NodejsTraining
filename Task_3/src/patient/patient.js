@@ -20,6 +20,7 @@ const patient = new Schema({
     inactivereason: { type: String },
     dateinactivate: { type: String },
     created: { type: Date },
+    createdby: { type: String }
 });
 
 function Validation(req, res, next) {
@@ -38,6 +39,7 @@ function Validation(req, res, next) {
             inactivereason,
             dateinactivate,
             data,
+            createdby
         }
     } = req;
 
@@ -55,8 +57,8 @@ function Validation(req, res, next) {
         inactivereason,
         dateinactivate,
         data,
+        createdby
     };
-
     //checking the validate conditions 
     let errors = patient.validate(patientData);
     if (errors.length) {

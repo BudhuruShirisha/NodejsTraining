@@ -26,7 +26,7 @@ app.use(upload.single("file"));
 app.use("/patient", patient);
 app.use("/organization", organization);
 app.use("/common", common);
-app.use("/user", user)
+app.use("/user", user);
 
 //SET the server to listen at 5000
 app.listen(5000, () =>

@@ -63,7 +63,8 @@
     },
     "authenticate": {
         "rectype": "authenticate",
-        "refrectype": ["user"]
+        "refrectype": ["user"],
+        "passwordreqex": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
     },
 
     "aws": {
@@ -74,5 +75,10 @@
     "db": {
         "dbname": "Task3",
         "mongodburl": "mongodb+srv://new_user:dMDhJVcI4LwXaBQc@cluster1.p9bf7wl.mongodb.net/?retryWrites=true&w=majority"
-    }
+    },
+    "key": {
+        "secret_key": "TOKEN",
+        "exphrs": "24h"
+    },
+    "roles": { "rectype": "assigned roles" }
 }

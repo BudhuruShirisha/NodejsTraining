@@ -9,8 +9,8 @@ const {
     updateRec,
     deleteRec,
 } = require("../src/patient/controller");
-
-router.post("/create/", Validation, createRec);
+const { authenticateJWT } = require("../src/middleware/middleware")
+router.post("/create/", authenticateJWT, Validation, createRec);
 
 router.get("/get/", getRec);
 
