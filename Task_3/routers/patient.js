@@ -20,7 +20,6 @@ router.delete("/delete/", deleteRec);
 router.post("/contact", async(req, res) => {
     try {
         const __action = req.body.__action;
-
         const processFunction = processFun(__action);
         const contactBody = req.body.body || {};
         contactBody.refrectype = config.patient.rectype;;

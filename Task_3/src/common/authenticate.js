@@ -1,5 +1,5 @@
 const Schema = require("validate");
-const { Utils } = require("../common/utils");
+const { Utils } = require("./utils");
 //var passwordValidator = require('password-validator');
 const config = require("../config/app.sepc.json");
 const {

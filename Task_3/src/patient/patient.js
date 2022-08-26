@@ -14,7 +14,7 @@ const patient = new Schema({
     language: {
         type: String,
         enum: config.patient.language,
-        required: true
+
     },
     status: { type: String, enum: [config.common.status.active, config.common.status.inactive] },
     inactivereason: { type: String },
@@ -42,7 +42,7 @@ function Validation(req, res, next) {
             createdby
         }
     } = req;
-
+    console.log(req.body)
     const patientData = {
         rectype,
         firstname,

@@ -31,6 +31,7 @@ async function getNextSequenceValue() {
 
 //createRecord  to insert record into collection 
 async function createRecord(item) {
+
     return new Promise(async(resolve, reject) => {
         try {
             item.created = utils.getCurrentDateTime(); //getCurrentDateTime() to get current data and time from Utils 
