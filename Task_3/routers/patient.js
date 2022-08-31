@@ -22,7 +22,7 @@ router.post("/contact", async(req, res) => {
         const __action = req.body.__action;
         const processFunction = processFun(__action);
         const contactBody = req.body.body || {};
-        contactBody.refrectype = config.patient.rectype;;
+        contactBody.refrectype = config.patient.rectype;
         const result = await processFunction(contactBody);
         res.status(200).json({ status: "Success", results: result });
     } catch (error) {

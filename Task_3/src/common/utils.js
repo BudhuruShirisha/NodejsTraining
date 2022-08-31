@@ -53,6 +53,7 @@ class Utils {
                     throw "enter valid data";
                 }
             });
+
             return true;
         }
         //to validate the email

@@ -11,7 +11,6 @@ const roles = new Schema({
     refid: { type: String, required: true }
 })
 
-
 function rolesValidation(rolesBody) {
     const { roleid, refid } = rolesBody;
     const Data = { refid, roleid };

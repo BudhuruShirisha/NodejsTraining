@@ -42,7 +42,7 @@ function Validation(req, res, next) {
             createdby
         }
     } = req;
-    console.log(req.body)
+
     const patientData = {
         rectype,
         firstname,

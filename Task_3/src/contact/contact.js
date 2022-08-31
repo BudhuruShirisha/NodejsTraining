@@ -18,7 +18,7 @@ const contactSchema = new Schema({
             enum: [config.patient.rectype, config.organization.rectype],
             required: true
         },
-        refid: { type: String, required: true },
+        refid: { type: String },
         type: {
             type: String,
             enum: Object.values(config.contact.type),
@@ -50,7 +50,6 @@ async function addAddress(contactBody) {
     try {
         contactBody.rectype = config.contact.rectype;
         const { refid, type, refrectype, subtype, data, } = contactBody
-
         validation(contactBody)
         const { type: contactType, subtype: subType } = config.contact
         if (type != contactType.address) throw "invalid type";
@@ -58,15 +57,18 @@ async function addAddress(contactBody) {
         const orgparams = { rectype: refrectype, id: refid };
         await getRecord(orgparams) //getRecord is to check record is available or not
         const params = {
-                data,
-                address: config.contact.address
-            }
-            //validating the address
-        utils.validateaddress(params)
-        if (refrectype == config.patient.rectype) {
-            const orgid = await utils.getRecOrgId(orgparams); //if rectype is patient then get organizationid
-            contactBody.orgid = orgid;
+            data,
+            address: config.contact.address
         }
+
+        //validating the address
+        utils.validateaddress(params)
+            /* if (refrectype == config.patient.rectype) {
+                const orgid = await utils.getRecOrgId(orgparams); //if rectype is patient then get organizationid
+                contactBody.orgid = orgid;
+
+            } */
+
         const contactresult = await createRecord(contactBody);
         return contactresult;
     } catch (error) {
@@ -166,7 +168,7 @@ async function addPhone(contactBody) {
         const orgparams = { rectype: refrectype, id: refid };
 
         await getRecord(orgparams);
-        utils.validatephone(data);
+        //   utils.validatephone(data);
         if (refrectype == config.patient.rectype) {
             const orgid = await utils.getRecOrgId(orgparams);
             contactBody.orgid = orgid;
