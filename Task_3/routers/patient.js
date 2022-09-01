@@ -17,7 +17,7 @@ router.get("/get/", getRec);
 router.put("/update/", updateRec);
 
 router.delete("/delete/", deleteRec);
-router.post("/contact", async(req, res) => {
+router.post("/contact", authenticateJWT, async(req, res) => {
     try {
         const __action = req.body.__action;
         const processFunction = processFun(__action);

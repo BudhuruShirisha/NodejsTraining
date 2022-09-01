@@ -1,9 +1,10 @@
 const fetch = require("node-fetch")
 const axios = require('axios')
+const chunk = require("lodash.chunk")
 const datechange = require("date-and-time");
 const config = require("../config/app.sepc.json")
 const api = "http://localhost:5000";
-
+const size = 2;
 async function Start(count) {
     try {
         const users = await getUserData(count);
@@ -13,14 +14,17 @@ async function Start(count) {
             userList.push(parsingData(userObj));
         });
         const token = await setauthorization();
-        const recordInfo = userList.map(async(userObj) => {
-            const patientInfo = await createPatient(userObj.patient, token);
-            const contactInfo = await createcontact(patientInfo.id, userObj.contact);
-            return contactInfo;
-        });
-        Promise.all(recordInfo).then((result) => {
-            console.log(result);
-            return result;
+        const recordInfo = chunk(userList, size);
+        recordInfo.map(async(obj) => {
+            const recordData = obj.map(async(userObj) => {
+                const patientInfo = await createPatient(userObj.patient, token);
+                if (!patientInfo) throw "patient record is Not inserted because of inactive oganization!";
+                const contactInfo = await createcontact(patientInfo.id, userObj.contact, token);
+                return contactInfo;
+            });
+            await Promise.all(recordData).then((result) => {
+                console.log(result);
+            })
         });
     } catch (err) {
         console.log(err)
@@ -77,7 +81,7 @@ async function setauthorization() {
         const tokenInfo = await axios.post(api + "/user/login", user)
         return tokenInfo.data.results;
     } catch (error) {
-        console.log("error");
+        console.log(error);
     }
 }
 
@@ -88,7 +92,7 @@ async function getRandomOrgId() {
         const orgdata = orgRec.data.results;
         const random = orgdata[Math.floor(Math.random() * orgdata.length)];
         return random.id;
-    } catch (err) { console.log("err2") }
+    } catch (err) { console.log(err) }
 }
 //create patient Record
 async function createPatient(patientParams, token) {
@@ -100,33 +104,38 @@ async function createPatient(patientParams, token) {
         })
         return patientRec.data.results;
     } catch (error) {
-        console.log("error.response");
+        console.log(error);
     }
 }
 
 //create Contact Record
-async function createcontact(refid, contactparams) {
+async function createcontact(refid, contactparams, token) {
     try {
-        const contactList = [];
+        const contactRec = [];
         if (contactparams.data) {
             const addressparams = { body: { refid, type: "address", subtype: "work", data: contactparams.data }, __action: "addAddress" };
-            const contactRec = await axios.post(api + "/patient/contact", addressparams)
-            contactList.push(contactRec.data.results);
+            const contactData = await axios.post(api + "/patient/contact", addressparams, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            contactRec.push(contactData.data.results);
         }
         if (contactparams.email) {
             const emailparams = { body: { refid, type: "email", subtype: "primary", data: contactparams.email }, __action: "addEmail" };
-            const contactRec = await axios.post(api + "/patient/contact", emailparams)
-            contactList.push(contactRec.data.results);
-
+            const contactData = await axios.post(api + "/patient/contact", emailparams, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            contactRec.push(contactData.data.results)
         }
         if (contactparams.phone) {
             const phoneparams = { body: { refid, type: "phone", subtype: "personal", data: contactparams.phone }, __action: "addPhone" };
-            const contactRec = await axios.post(api + "/patient/contact", phoneparams)
-            contactList.push(contactRec.data.results);
+            const contactData = await axios.post(api + "/patient/contact", phoneparams, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            contactRec.push(contactData.data.results);
         }
-        return contactList;
+        return contactRec;
     } catch (err) {
         console.log(err)
     }
 }
-Start(2)
+Start(4)
