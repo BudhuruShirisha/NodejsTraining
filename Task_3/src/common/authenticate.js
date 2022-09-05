@@ -1,7 +1,7 @@
 const Schema = require("validate");
 const { Utils } = require("./utils");
-//var passwordValidator = require('password-validator');
 const config = require("../config/app.sepc.json");
+const { addToken } = require("../common/token.js")
 const {
     createRecord,
     getRecord,
@@ -94,6 +94,8 @@ async function validateAuth(payload) {
         const tokenParams = { id, orgid, firstname, lastname, username }
         const token = utils.jwtToken(tokenParams);
         utils.verifyJwtToken(token);
+        const tokenparams = { token, refid, refrectype }
+        await addToken(tokenparams);
         return token;
     } catch (err) {
         throw err;

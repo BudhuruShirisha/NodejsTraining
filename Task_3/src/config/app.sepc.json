@@ -80,5 +80,9 @@
         "secret_key": "TOKEN",
         "exphrs": "24h"
     },
-    "roles": { "rectype": "assigned roles" }
+    "roles": { "rectype": "assigned roles" },
+    "token": {
+        "rectype": "token",
+        "refrectype": ["user"]
+    }
 }

@@ -1,48 +1,25 @@
-const fetch = require("node-fetch")
-const axios = require('axios')
-const chunk = require("lodash.chunk")
+const fetch = require("node-fetch");
+const axios = require("axios");
 const datechange = require("date-and-time");
-const config = require("../config/app.sepc.json")
-const api = "http://localhost:5000";
-const size = 2;
-async function Start(count) {
-    try {
-        const users = await getUserData(count);
-        const userData = users.results;
-        const userList = [];
-        userData.forEach(userObj => {
-            userList.push(parsingData(userObj));
-        });
-        const token = await setauthorization();
-        const recordInfo = chunk(userList, size);
-        recordInfo.map(async(obj) => {
-            const recordData = obj.map(async(userObj) => {
-                const patientInfo = await createPatient(userObj.patient, token);
-                if (!patientInfo) throw "patient record is Not inserted because of inactive oganization!";
-                const contactInfo = await createcontact(patientInfo.id, userObj.contact, token);
-                return contactInfo;
-            });
-            await Promise.all(recordData).then((result) => {
-                console.log(result);
-            })
-        });
-    } catch (err) {
-        console.log(err)
-    }
-}
-//getUserData is  to get randomuser data
+const chunk = require("lodash.chunk");
+
+const config = require("../config/app.sepc.json");
+
+const api = "http://localhost:5000/";
+
+//getUserData is used to get random user data
 async function getUserData(count) {
     try {
-        const url = "https://randomuser.me/api/?results="
+        const url = "https://randomuser.me/api/?results=";
         const res = await fetch(url + count);
         const users = await res.json();
-        return users;
-
+        return users.results;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
-//parsing randomuser data
+
+//parseUserRecord used to parse random user data
 function parsingData(params) {
     const {
         gender,
@@ -71,71 +48,125 @@ function parsingData(params) {
     };
     return responseData;
 }
-//get token 
-async function setauthorization() {
+
+//get token from user data
+async function getToken() {
     try {
         const user = {
-            username: "budhuruShirisha",
-            password: "Siri@6789"
-        }
-        const tokenInfo = await axios.post(api + "/user/login", user)
+            username: "Shirisha",
+            password: "Siri@1234",
+        };
+        const tokenInfo = await axios.post(api + "user/login", user);
         return tokenInfo.data.results;
     } catch (error) {
-        console.log(error);
+        console.log("error");
     }
 }
 
-// get random organizationId
-async function getRandomOrgId() {
+//getOrganizationRecord used to get Organization Record
+async function getOrganizationRandomId() {
     try {
-        const orgRec = await axios.get(api + "/organization/get")
-        const orgdata = orgRec.data.results;
-        const random = orgdata[Math.floor(Math.random() * orgdata.length)];
-        return random.id;
-    } catch (err) { console.log(err) }
-}
-//create patient Record
-async function createPatient(patientParams, token) {
-    try {
-        patientParams.orgid = await getRandomOrgId();
-        patientParams.status = "active";
-        const patientRec = await axios.post(api + "/patient/create", patientParams, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-        return patientRec.data.results;
+        const orgRecordInfo = await axios.get(api + "organization/get");
+        const orgRecordData = orgRecordInfo.data.results;
+        const orgData = await orgRecordData[
+            Math.floor(Math.random() * orgRecordData.length)
+        ];
+        return orgData.id;
     } catch (error) {
         console.log(error);
     }
 }
 
-//create Contact Record
+//createPatient used to create patient record with patient create api
+async function createPatient(patientParams, token) {
+    try {
+        patientParams.orgid = await getOrganizationRandomId();
+        patientParams.status = config.common.status.active;
+        const patientRecord = await axios.post(
+            api + "patient/create",
+            patientParams, {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
+        // console.log("patientRecord", patientRecord.data.results)
+        return patientRecord.data.results;
+    } catch (error) {
+        console.log("error");
+    }
+}
+
+//createContact used to create contact record with patient contact api
+
 async function createcontact(refid, contactparams, token) {
     try {
+
         const contactRec = [];
         if (contactparams.data) {
             const addressparams = { body: { refid, type: "address", subtype: "work", data: contactparams.data }, __action: "addAddress" };
-            const contactData = await axios.post(api + "/patient/contact", addressparams, {
+            const contactData = await axios.post(api + "patient/contact", addressparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results);
         }
         if (contactparams.email) {
             const emailparams = { body: { refid, type: "email", subtype: "primary", data: contactparams.email }, __action: "addEmail" };
-            const contactData = await axios.post(api + "/patient/contact", emailparams, {
+            const contactData = await axios.post(api + "patient/contact", emailparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results)
         }
         if (contactparams.phone) {
             const phoneparams = { body: { refid, type: "phone", subtype: "personal", data: contactparams.phone }, __action: "addPhone" };
-            const contactData = await axios.post(api + "/patient/contact", phoneparams, {
+            const contactData = await axios.post(api + "patient/contact", phoneparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results);
         }
+        //console.log(contactRec)
         return contactRec;
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
-Start(4)
+
+function processRecords(userRecord, token) {
+    return new Promise(async(resolve, reject) => {
+        try {
+            const patientRecord = await createPatient(userRecord.patient, token);
+            // console.log(patientRecord.id)
+            const contactRecord = await createcontact(
+                patientRecord.id, userRecord.contact, token
+            );
+            resolve(contactRecord);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+//create patient record and contact record
+async function start(count) {
+    try {
+        const userData = await getUserData(count);
+        const userList = [];
+        userData.forEach((userObj) => {
+            userList.push(parsingData(userObj));
+        });
+        const size = 2;
+        const token = await getToken();
+        const patientPromises = userList.map((userRecord) => {
+            return processRecords(userRecord, token);
+        });
+
+        for (i = 0; i < patientPromises.length; i = i + size) {
+            const recordData = patientPromises.slice(i, i + size);
+            Promise.all(recordData).then((result) => {
+                console.log("res", result);
+            });
+        }
+    } catch (error) {
+        console.log("error1");
+    }
+}
+
+
+start(4);

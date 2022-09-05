@@ -97,6 +97,7 @@ class Utils {
     verifyJwtToken(token) {
         try {
             const decoded = jwt.verify(token, config.key.secret_key);
+            console.log(decoded)
             return decoded;
         } catch (err) {
             throw err;

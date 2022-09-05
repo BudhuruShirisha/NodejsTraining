@@ -11,6 +11,7 @@ const {
 const { processFun } = require("../src/common/roles")
 
 const { authValidation, setAuth, validateAuth } = require("../src/common/authenticate");
+const { deleteToken } = require("../src/common/token.js");
 
 router.post("/create/", Validation, createRec);
 
@@ -40,7 +41,14 @@ router.post("/login", async(req, res) => {
         res.status(400).json({ status: "Error :", error: error });
     }
 })
-
+router.delete("/logout", async(req, res) => {
+    try {
+        const result = await deleteToken(req.body);
+        res.status(200).json({ status: "Success", results: result });
+    } catch (error) {
+        res.status(400).json({ status: "Error ", error: error });
+    }
+})
 router.post("/roles/", async(req, res) => {
     try {
         const __action = req.body.__action;

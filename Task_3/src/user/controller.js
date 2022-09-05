@@ -11,7 +11,7 @@ const utils = new Utils();
 async function createRec(req, res) {
     try {
         req.body.rectype = config.user.rectype;
-        await utils.validateDob(req.body.dob);
+        utils.validateDob(req.body.dob);
         const userInfo = await createRecord(req.body);
         res.status(200).json({ status: "Success", results: userInfo });
     } catch (error) {

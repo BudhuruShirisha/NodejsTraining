@@ -51,7 +51,6 @@ async function updateRole(rolesBody) {
         const { id, roleid } = rolesBody
         const payload = { id, body: { roleid } };
         payload.rectype = config.roles.rectype;
-        console.log(payload)
         const rolesInfo = await updateRecord(payload);
         return rolesInfo;
     } catch (error) {

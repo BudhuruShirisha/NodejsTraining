@@ -65,7 +65,6 @@ async function getRecord(item) {
 async function updateRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
-            console.log("erwe", item)
             const { rectype, id, body } = item;
             const db = await dbConnection();
             const collname = rectype;
