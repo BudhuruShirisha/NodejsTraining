@@ -19,6 +19,7 @@
         "dotenv": "^16.0.1",
         "email-validator": "^2.0.4",
         "encrypt_decrypt": "^1.0.0",
+        "excel-date-to-js": "^1.1.5",
         "express": "^4.18.1",
         "express-validator": "^6.14.2",
         "jsonwebtoken": "^8.5.1",
@@ -29,6 +30,7 @@
         "multer-s3": "^3.0.1",
         "node-fetch": "^2.6.7",
         "nodemon": "^2.0.19",
-        "validate": "^5.2.0"
+        "validate": "^5.2.0",
+        "xlsx": "^0.18.5"
     }
 }

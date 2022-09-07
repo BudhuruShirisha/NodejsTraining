@@ -1,46 +1,52 @@
+const reader = require("xlsx");
 const fetch = require("node-fetch");
 const axios = require("axios");
-const datechange = require("date-and-time");
 const config = require("../config/app.sepc.json");
 const api = "http://localhost:5000/";
+const { getJsDateFromExcel } = require("excel-date-to-js");
 
-// get random user data
-async function getUserData(count) {
-    try {
-        const url = "https://randomuser.me/api/?results=";
-        const res = await fetch(url + count);
-        const users = await res.json();
-        return users.results;
-    } catch (error) {
-        console.log(error);
+function getxmlData() {
+    const file = reader.readFile("./data.xlsx");
+
+    const userList = [];
+
+    const sheets = file.SheetNames
+    for (i = 0; i < sheets.length; i++) {
+        const data = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[i]])
+        data.forEach((userObj) => {
+            userList.push(parsingData(userObj));
+        });
     }
+    return userList;
 }
 
-// parse random user data
-function parsingData(params) {
+//parseUserRecord used to parse random user data
+function parsingData(obj) {
     const {
+        title,
+        firstname,
+        lastname,
+        dob,
+        age,
         gender,
-        name: { title, first: firstname, last: lastname },
-        dob: { date, age },
-        location: {
-            street: { number, name },
-            city,
-            state,
-            postcode
-        },
         email,
-        phone
-    } = params
+        phone,
+        address
+    } = obj;
+    // console.log(obj)
+    const dobformat = getJsDateFromExcel(dob).toISOString().split('T')[0]
+    const params = address.split(",");
     const data = {
-        line1: number,
-        line2: name,
-        city,
-        state,
-        zip: postcode
-    }
-    const dob = datechange.format((new Date(date)), 'YYYY-MM-DD');
+            line1: params[0],
+            line2: params[1],
+            city: params[2],
+            state: params[3],
+            zip: params[4]
+        }
+        //const dob = datechange.format((new Date(date)), 'YYYY-MM-DD');
+
     const responseData = {
-        patient: { gender, firstname, lastname, title, dob, age, },
+        patient: { gender, firstname, lastname, title, dob: dobformat, age, },
         contact: { data, email, phone }
     };
     return responseData;
@@ -56,11 +62,11 @@ async function getToken() {
         const tokenInfo = await axios.post(api + "user/login", user);
         return tokenInfo.data.results;
     } catch (error) {
-        console.log(error);
+        console.log("error");
     }
 }
 
-// get Organization Record
+//getOrganizationRecord used to get Organization Record
 async function getOrganizationRandomId() {
     try {
         const orgRecordInfo = await axios.get(api + "organization/get");
@@ -74,7 +80,7 @@ async function getOrganizationRandomId() {
     }
 }
 
-// create patient record with patient create api
+//createPatient used to create patient record with patient create api
 async function createPatient(patientParams, token) {
     try {
         patientParams.orgid = await getOrganizationRandomId();
@@ -85,13 +91,15 @@ async function createPatient(patientParams, token) {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
+        // console.log("patientRecord", patientRecord.data.results)
         return patientRecord.data.results;
     } catch (error) {
         console.log(error);
     }
 }
 
-// create contact record with patient contact api
+//createContact used to create contact record with patient contact api
+
 async function createcontact(refid, contactparams, token) {
     try {
 
@@ -117,6 +125,7 @@ async function createcontact(refid, contactparams, token) {
             });
             contactRec.push(contactData.data.results);
         }
+        //console.log(contactRec)
         return contactRec;
     } catch (err) {
         console.log(err);
@@ -138,14 +147,10 @@ function processRecords(userRecord, token) {
     });
 }
 //create patient record and contact record
-async function start(count) {
+async function start() {
     try {
-        const userData = await getUserData(count);
-        const userList = [];
-        userData.forEach((userObj) => {
-            userList.push(parsingData(userObj));
-        });
-        const size = 1;
+        const userList = getxmlData();
+        const size = 2;
         const token = await getToken();
         const patientPromises = userList.map((userRecord) => {
             return processRecords(userRecord, token);
@@ -161,4 +166,6 @@ async function start(count) {
         console.log(error);
     }
 }
-start(2);
+
+
+start();

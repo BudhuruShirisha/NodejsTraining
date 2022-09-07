@@ -24,28 +24,7 @@ function tokenvalidation(params) {
         return true;
     };
 }
-//adding the token record
-/* async function addToken(payload) {
-    try {
-        tokenvalidation(payload);
-        const { refid } = payload;
-        payload.rectype = config.token.rectype;
-        const params = { rectype: payload.rectype, refid }
-
-        const tokenInfo = await getRecord(params);
-        if (tokenInfo.length) {
-
-            const { id } = tokenInfo[0];
-            const tokenParams = { id, rectype: payload.rectype }
-            await deleteRecord(tokenParams);
-        }
-        const Record = await createRecord(payload);
-        return { message: "token record Created successfully" };
-    } catch (err) {
-        console.log(err)
-    }
-} */
-
+// add token record
 
 async function addToken(payload) {
     try {
@@ -65,8 +44,6 @@ async function addToken(payload) {
         throw error;
     }
 }
-
-
 
 //deleting the token record
 async function deleteToken(payload) {

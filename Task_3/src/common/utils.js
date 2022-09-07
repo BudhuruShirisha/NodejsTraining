@@ -86,6 +86,7 @@ class Utils {
             throw "Enter valid dob in YYYY-MM-DD !";
         } else
             return true;
+
     }
     MD5(text) {
         return md5(text);
@@ -97,7 +98,6 @@ class Utils {
     verifyJwtToken(token) {
         try {
             const decoded = jwt.verify(token, config.key.secret_key);
-            console.log(decoded)
             return decoded;
         } catch (err) {
             throw err;
