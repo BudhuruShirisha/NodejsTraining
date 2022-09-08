@@ -56,7 +56,7 @@ async function getRecord(item) {
             const recList = await db.collection(collname).find(restParams).toArray();
             resolve(recList);
         } catch (error) {
-            reject(error);
+            reject("error");
         }
     });
 }

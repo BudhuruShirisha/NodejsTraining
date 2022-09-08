@@ -45,11 +45,11 @@ class Utils {
         //to validate the address
     validateaddress(params) {
             const {
-                data,
-                address
+                address,
+                checkaddress
             } = params;
-            address.forEach((element) => {
-                if (!data.hasOwnProperty(element)) {
+            checkaddress.forEach((element) => {
+                if (!address.hasOwnProperty(element)) {
                     throw "enter valid data";
                 }
             });
@@ -57,8 +57,8 @@ class Utils {
             return true;
         }
         //to validate the email
-    emailValidation(data) {
-            if (emailvalidator.validate(data)) {
+    emailValidation(email) {
+            if (emailvalidator.validate(email)) {
                 return true;
             } else {
                 throw "invalid email";

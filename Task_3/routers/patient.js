@@ -1,7 +1,7 @@
 const Router = require("express");
 const router = Router();
 const config = require("../src/config/app.sepc.json")
-const { processFun } = require("../src/contact/contact.js")
+const { processFun, getcontactRec } = require("../src/contact/contact.js")
 const { Validation } = require("../src/patient/patient");
 const {
     createRec,
@@ -29,5 +29,5 @@ router.post("/contact", authenticateJWT, async(req, res) => {
         res.status(400).json({ status: "Error :", error: error });
     }
 })
-
+router.get("/contact/get", getcontactRec);
 module.exports = router;

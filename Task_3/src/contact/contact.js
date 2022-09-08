@@ -29,7 +29,7 @@ const contactSchema = new Schema({
             enum: Object.values(config.contact.subtype),
             required: true,
         },
-        data: {}
+
     })
     //checking validate conditions
 function validation(contactBody) {
@@ -49,7 +49,7 @@ function validation(contactBody) {
 async function addAddress(contactBody) {
     try {
         contactBody.rectype = config.contact.rectype;
-        const { refid, type, refrectype, subtype, data, } = contactBody
+        const { refid, type, refrectype, subtype, address } = contactBody
         validation(contactBody)
         const { type: contactType, subtype: subType } = config.contact
         if (type != contactType.address) throw "invalid type";
@@ -57,17 +57,17 @@ async function addAddress(contactBody) {
         const orgparams = { rectype: refrectype, id: refid };
         await getRecord(orgparams) //getRecord is to check record is available or not
         const params = {
-            data,
-            address: config.contact.address
+            address,
+            checkaddress: config.contact.address
         }
 
         //validating the address
         utils.validateaddress(params)
-            /* if (refrectype == config.patient.rectype) {
-                const orgid = await utils.getRecOrgId(orgparams); //if rectype is patient then get organizationid
-                contactBody.orgid = orgid;
+        if (refrectype == config.patient.rectype) {
+            const orgid = await utils.getRecOrgId(orgparams); //if rectype is patient then get organizationid
+            contactBody.orgid = orgid;
 
-            } */
+        }
 
         const contactresult = await createRecord(contactBody);
         return contactresult;
@@ -78,16 +78,16 @@ async function addAddress(contactBody) {
 //updating the address for patient or organization
 async function updateAddress(contactBody) {
     try {
-        const { id, type, data } = contactBody
+        const { id, type, address } = contactBody
 
         const { type: contactType, rectype: recType } = config.contact
         if (type != contactType.address) throw "invalid type";
 
-        const payload = { id, body: { type, data } };
+        const payload = { id, body: { type, address } };
         payload.rectype = recType;
         const params = {
-            data,
-            address: config.contact.address
+            address,
+            checkaddress: config.contact.address
         }
         utils.validateaddress(params)
         const contactinfo = await updateRecord(payload);
@@ -109,7 +109,7 @@ async function removeAddress(contactBody) {
 //adding the email to patient or organization
 async function addEmail(contactBody) {
     try {
-        const { refid, type, subtype, data, refrectype } = contactBody;
+        const { refid, type, subtype, email, refrectype } = contactBody;
         validation(contactBody);
         const { type: contactType, subtype: subType, rectype: recType } = config.contact
         contactBody.rectype = recType;
@@ -119,7 +119,7 @@ async function addEmail(contactBody) {
         const orgparams = { rectype: refrectype, id: refid };
         await getRecord(orgparams);
 
-        utils.emailValidation(data);
+        utils.emailValidation(email);
         if (refrectype == config.patient.rectype) {
             const orgid = await utils.getRecOrgId(orgparams);
             contactBody.orgid = orgid;
@@ -133,11 +133,11 @@ async function addEmail(contactBody) {
 //update  email for patient or organization
 async function updateEmail(contactBody) {
     try {
-        const { id, type, data } = contactBody
+        const { id, type, email } = contactBody
 
         const { type: contactType, rectype: recType } = config.contact
         if (type != contactType.email) throw "invalid type";
-        const payload = { id, body: { type, data } };
+        const payload = { id, body: { type, email } };
         payload.rectype = recType;
         const contactinfo = await updateRecord(payload);
         return contactinfo;
@@ -159,7 +159,7 @@ async function removeEmail(contactBody) {
 //adding the phonenum to patient or organization
 async function addPhone(contactBody) {
     try {
-        const { refid, type, subtype, data, refrectype } = contactBody;
+        const { refid, type, subtype, phone, refrectype } = contactBody;
         validation(contactBody);
         const { type: contactType, subtype: subType, rectype: recType } = config.contact
         contactBody.rectype = recType;
@@ -182,11 +182,11 @@ async function addPhone(contactBody) {
 //updating the phonenum for patient or organization
 async function updatePhone(contactBody) {
     try {
-        const { id, type, data } = contactBody
+        const { id, type, phone } = contactBody
 
         const { type: contactType, rectype: recType } = config.contact
         if (type != contactType.phone) throw "invalid type";
-        const payload = { id, body: { type, data } };
+        const payload = { id, body: { type, phone } };
         payload.rectype = recType;
         const contactinfo = await updateRecord(payload);
         return contactinfo;
@@ -208,7 +208,7 @@ async function removePhone(contactBody) {
 async function addFax(contactBody) {
     try {
         const { refid, type, subtype, data, refrectype } = contactBody;
-        await validation(contactBody);
+        validation(contactBody);
         const { type: contactType, subtype: subType, rectype: recType } = config.contact
         contactBody.rectype = recType;
         if (type != contactType.fax) throw "invalid type enter email";
@@ -251,6 +251,18 @@ async function removeFax(contactBody) {
         throw error;
     }
 }
+//getRec is to get the organization record
+async function getcontactRec(req, res) {
+    try {
+        const { query } = req;
+        const payload = query;
+        payload.rectype = config.contact.rectype;
+        const data = await getRecord(payload);
+        res.status(200).json({ status: "Success", results: data });
+    } catch (error) {
+        res.status(400).json({ status: "Error :", error: error });
+    }
+}
 // processfun to perform action based on appropriate method
 function processFun(__action) {
 
@@ -279,4 +291,5 @@ function processFun(__action) {
 
 module.exports = {
     processFun,
+    getcontactRec
 };

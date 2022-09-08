@@ -19,13 +19,13 @@ function getxmlData() {
     }
     return userList;
 }
-
 //parseUserRecord used to parse random user data
 function parsingData(obj) {
     const {
         title,
         firstname,
         lastname,
+        office,
         dob,
         age,
         gender,
@@ -33,26 +33,25 @@ function parsingData(obj) {
         phone,
         address
     } = obj;
-    // console.log(obj)
     const dobformat = getJsDateFromExcel(dob).toISOString().split('T')[0]
     const params = address.split(",");
     const data = {
-            line1: params[0],
-            line2: params[1],
-            city: params[2],
-            state: params[3],
-            zip: params[4]
-        }
-        //const dob = datechange.format((new Date(date)), 'YYYY-MM-DD');
-
+        line1: params[0],
+        line2: params[1],
+        city: params[2],
+        state: params[3],
+        zip: params[4]
+    }
     const responseData = {
         patient: { gender, firstname, lastname, title, dob: dobformat, age, },
-        contact: { data, email, phone }
+        contact: { data, email, phone },
+        name: office,
     };
+
     return responseData;
 }
 
-//get token from user data
+//get token
 async function getToken() {
     try {
         const user = {
@@ -66,24 +65,29 @@ async function getToken() {
     }
 }
 
-//getOrganizationRecord used to get Organization Record
-async function getOrganizationRandomId() {
+// get Organization id
+async function getOrganizationId(name) {
     try {
-        const orgRecordInfo = await axios.get(api + "organization/get");
+        const orgRecordInfo = await axios.get(api + "organization/get", { params: { name } });
         const orgRecordData = orgRecordInfo.data.results;
-        const orgData = await orgRecordData[
-            Math.floor(Math.random() * orgRecordData.length)
-        ];
-        return orgData.id;
+
+        if (orgRecordData.length) {
+            return orgRecordData[0].id;
+        } else {
+            const params = { code: "0045", type: "backoffice", name, status: "active" };
+            const orgRecordInfo = await axios.post(api + "organization/create", params);
+            const orgRecordData = orgRecordInfo.data.results;
+            return orgRecordData.id;
+        }
     } catch (error) {
-        console.log(error);
+        console.log(error.response.data);
     }
 }
 
-//createPatient used to create patient record with patient create api
-async function createPatient(patientParams, token) {
+//create patient record 
+async function createPatient(patientParams, name, token) {
     try {
-        patientParams.orgid = await getOrganizationRandomId();
+        patientParams.orgid = await getOrganizationId(name);
         patientParams.status = config.common.status.active;
         const patientRecord = await axios.post(
             api + "patient/create",
@@ -91,15 +95,12 @@ async function createPatient(patientParams, token) {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
-        // console.log("patientRecord", patientRecord.data.results)
         return patientRecord.data.results;
     } catch (error) {
-        console.log(error);
+        console.log("error");
     }
 }
-
-//createContact used to create contact record with patient contact api
-
+// create contact record 
 async function createcontact(refid, contactparams, token) {
     try {
 
@@ -125,28 +126,25 @@ async function createcontact(refid, contactparams, token) {
             });
             contactRec.push(contactData.data.results);
         }
-        //console.log(contactRec)
         return contactRec;
     } catch (err) {
         console.log(err);
     }
 }
-
+//create patient and contact record
 function processRecords(userRecord, token) {
     return new Promise(async(resolve, reject) => {
         try {
-            const patientRecord = await createPatient(userRecord.patient, token);
-            // console.log(patientRecord.id)
-            const contactRecord = await createcontact(
-                patientRecord.id, userRecord.contact, token
-            );
+            const patientRecord = await createPatient(userRecord.patient, userRecord.name, token);
+
+            const contactRecord = await createcontact(patientRecord.id, userRecord.contact, token);
             resolve(contactRecord);
         } catch (error) {
             reject(error);
         }
     });
 }
-//create patient record and contact record
+//main method
 async function start() {
     try {
         const userList = getxmlData();
@@ -166,6 +164,5 @@ async function start() {
         console.log(error);
     }
 }
-
 
 start();

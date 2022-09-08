@@ -16,7 +16,7 @@ async function getUserData(count) {
     }
 }
 
-// parse random user data
+// parsing random user data
 function parsingData(params) {
     const {
         gender,
@@ -31,7 +31,7 @@ function parsingData(params) {
         email,
         phone
     } = params
-    const data = {
+    const address = {
         line1: number,
         line2: name,
         city,
@@ -41,12 +41,12 @@ function parsingData(params) {
     const dob = datechange.format((new Date(date)), 'YYYY-MM-DD');
     const responseData = {
         patient: { gender, firstname, lastname, title, dob, age, },
-        contact: { data, email, phone }
+        contact: { address, email, phone }
     };
     return responseData;
 }
 
-//get token from user data
+//get token 
 async function getToken() {
     try {
         const user = {
@@ -60,7 +60,7 @@ async function getToken() {
     }
 }
 
-// get Organization Record
+// get Organization randomid
 async function getOrganizationRandomId() {
     try {
         const orgRecordInfo = await axios.get(api + "organization/get");
@@ -74,7 +74,7 @@ async function getOrganizationRandomId() {
     }
 }
 
-// create patient record with patient create api
+// create patient record 
 async function createPatient(patientParams, token) {
     try {
         patientParams.orgid = await getOrganizationRandomId();
@@ -91,27 +91,26 @@ async function createPatient(patientParams, token) {
     }
 }
 
-// create contact record with patient contact api
+// create contact record 
 async function createcontact(refid, contactparams, token) {
     try {
-
         const contactRec = [];
-        if (contactparams.data) {
-            const addressparams = { body: { refid, type: "address", subtype: "work", data: contactparams.data }, __action: "addAddress" };
+        if (contactparams.address) {
+            const addressparams = { body: { refid, type: "address", subtype: "work", address: contactparams.address }, __action: "addAddress" };
             const contactData = await axios.post(api + "patient/contact", addressparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results);
         }
         if (contactparams.email) {
-            const emailparams = { body: { refid, type: "email", subtype: "primary", data: contactparams.email }, __action: "addEmail" };
+            const emailparams = { body: { refid, type: "email", subtype: "primary", email: contactparams.email }, __action: "addEmail" };
             const contactData = await axios.post(api + "patient/contact", emailparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results)
         }
         if (contactparams.phone) {
-            const phoneparams = { body: { refid, type: "phone", subtype: "personal", data: contactparams.phone }, __action: "addPhone" };
+            const phoneparams = { body: { refid, type: "phone", subtype: "personal", phone: contactparams.phone }, __action: "addPhone" };
             const contactData = await axios.post(api + "patient/contact", phoneparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -122,22 +121,19 @@ async function createcontact(refid, contactparams, token) {
         console.log(err);
     }
 }
-
+//processrecords to create patient and create contact
 function processRecords(userRecord, token) {
     return new Promise(async(resolve, reject) => {
         try {
             const patientRecord = await createPatient(userRecord.patient, token);
-            // console.log(patientRecord.id)
-            const contactRecord = await createcontact(
-                patientRecord.id, userRecord.contact, token
-            );
+            const contactRecord = await createcontact(patientRecord.id, userRecord.contact, token);
             resolve(contactRecord);
         } catch (error) {
             reject(error);
         }
     });
 }
-//create patient record and contact record
+//main method 
 async function start(count) {
     try {
         const userData = await getUserData(count);
@@ -161,4 +157,4 @@ async function start(count) {
         console.log(error);
     }
 }
-start(2);
+start(6);

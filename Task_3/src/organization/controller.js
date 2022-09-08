@@ -24,7 +24,6 @@ async function getRec(req, res) {
         const { query } = req;
         const payload = query;
         payload.rectype = config.organization.rectype;
-
         const data = await getRecord(payload);
         res.status(200).json({ status: "Success", results: data });
     } catch (error) {
