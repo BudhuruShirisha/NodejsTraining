@@ -4,12 +4,11 @@ const axios = require("axios");
 const config = require("../config/app.sepc.json");
 const api = "http://localhost:5000/";
 const { getJsDateFromExcel } = require("excel-date-to-js");
+const { isLeapYear } = require("date-and-time");
 
-function getxmlData() {
+function getxlsxData() {
     const file = reader.readFile("./data.xlsx");
-
     const userList = [];
-
     const sheets = file.SheetNames
     for (i = 0; i < sheets.length; i++) {
         const data = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[i]])
@@ -17,6 +16,7 @@ function getxmlData() {
             userList.push(parsingData(userObj));
         });
     }
+
     return userList;
 }
 //parseUserRecord used to parse random user data
@@ -34,20 +34,20 @@ function parsingData(obj) {
         address
     } = obj;
     const dobformat = getJsDateFromExcel(dob).toISOString().split('T')[0]
-    const params = address.split(",");
+    const [line1, line2, city, state, zip] = address.split(",");
+
     const data = {
-        line1: params[0],
-        line2: params[1],
-        city: params[2],
-        state: params[3],
-        zip: params[4]
+        line1,
+        line2,
+        city,
+        state,
+        zip
     }
     const responseData = {
         patient: { gender, firstname, lastname, title, dob: dobformat, age, },
-        contact: { data, email, phone },
+        contact: { address: data, email, phone },
         name: office,
     };
-
     return responseData;
 }
 
@@ -65,29 +65,61 @@ async function getToken() {
     }
 }
 
-// get Organization id
-async function getOrganizationId(name) {
-    try {
-        const orgRecordInfo = await axios.get(api + "organization/get", { params: { name } });
-        const orgRecordData = orgRecordInfo.data.results;
+// get Organization name and id 
+async function getOrganizationnameandid(dataParams) {
 
-        if (orgRecordData.length) {
-            return orgRecordData[0].id;
-        } else {
-            const params = { code: "0045", type: "backoffice", name, status: "active" };
-            const orgRecordInfo = await axios.post(api + "organization/create", params);
-            const orgRecordData = orgRecordInfo.data.results;
-            return orgRecordData.id;
-        }
+    try {
+        const office = [];
+        dataParams.map((userObj) => {
+            if (!office.includes(userObj.name)) {
+                office.push(userObj.name);
+            }
+        })
+        const orgRec = await getOrganizationrecord();
+        const list = [];
+        orgRec.map((userObj) => {
+            const { name, id } = userObj;
+            list.push({ name, id });
+        })
+        office.map(async(name) => {
+            const Data = list.find(x => x.name === name)
+            if (!Data) {
+                const params = {
+                    code: name.replace(' ', '_'),
+                    type: config.organization.type[
+                        Math.floor(Math.random() * config.organization.type.length)
+                    ],
+                    status: "active",
+                    name
+                };
+                const orgRecordInfo = await axios.post(api + "organization/create", params);
+                const orgRecordData = orgRecordInfo.data.results;
+                const {
+                    id
+                } = orgRecordData;
+                list.push({ name, id })
+            }
+        })
+        return list;
     } catch (error) {
-        console.log(error.response.data);
+        console.log(error);
     }
 }
-
-//create patient record 
-async function createPatient(patientParams, name, token) {
+//get organization record
+async function getOrganizationrecord() {
     try {
-        patientParams.orgid = await getOrganizationId(name);
+        const orgRecordInfo = await axios.get(api + "organization/get");
+        const orgRecordData = orgRecordInfo.data.results;
+        return orgRecordData;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+//create patient record 
+async function createPatient(patientParams, id, token) {
+    try {
+        patientParams.orgid = id;
         patientParams.status = config.common.status.active;
         const patientRecord = await axios.post(
             api + "patient/create",
@@ -103,24 +135,23 @@ async function createPatient(patientParams, name, token) {
 // create contact record 
 async function createcontact(refid, contactparams, token) {
     try {
-
         const contactRec = [];
-        if (contactparams.data) {
-            const addressparams = { body: { refid, type: "address", subtype: "work", data: contactparams.data }, __action: "addAddress" };
+        if (contactparams.address) {
+            const addressparams = { body: { refid, type: "address", subtype: "work", address: contactparams.address }, __action: "addAddress" };
             const contactData = await axios.post(api + "patient/contact", addressparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results);
         }
         if (contactparams.email) {
-            const emailparams = { body: { refid, type: "email", subtype: "primary", data: contactparams.email }, __action: "addEmail" };
+            const emailparams = { body: { refid, type: "email", subtype: "primary", email: contactparams.email }, __action: "addEmail" };
             const contactData = await axios.post(api + "patient/contact", emailparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             contactRec.push(contactData.data.results)
         }
         if (contactparams.phone) {
-            const phoneparams = { body: { refid, type: "phone", subtype: "personal", data: contactparams.phone }, __action: "addPhone" };
+            const phoneparams = { body: { refid, type: "phone", subtype: "personal", phone: contactparams.phone }, __action: "addPhone" };
             const contactData = await axios.post(api + "patient/contact", phoneparams, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -132,11 +163,14 @@ async function createcontact(refid, contactparams, token) {
     }
 }
 //create patient and contact record
-function processRecords(userRecord, token) {
+function processRecords(userRecord, token, orgData) {
     return new Promise(async(resolve, reject) => {
         try {
-            const patientRecord = await createPatient(userRecord.patient, userRecord.name, token);
-
+            const Data = orgData.find(x => x.name === userRecord.name)
+            if (Data) {
+                id = Data.id
+            }
+            const patientRecord = await createPatient(userRecord.patient, id, token);
             const contactRecord = await createcontact(patientRecord.id, userRecord.contact, token);
             resolve(contactRecord);
         } catch (error) {
@@ -145,13 +179,16 @@ function processRecords(userRecord, token) {
     });
 }
 //main method
+
 async function start() {
     try {
-        const userList = getxmlData();
+        const userList = getxlsxData();
+        const orgData = await getOrganizationnameandid(userList)
         const size = 2;
         const token = await getToken();
+
         const patientPromises = userList.map((userRecord) => {
-            return processRecords(userRecord, token);
+            return processRecords(userRecord, token, orgData);
         });
 
         for (i = 0; i < patientPromises.length; i = i + size) {
@@ -164,5 +201,4 @@ async function start() {
         console.log(error);
     }
 }
-
 start();

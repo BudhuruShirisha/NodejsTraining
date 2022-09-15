@@ -157,4 +157,4 @@ async function start(count) {
         console.log(error);
     }
 }
-start(6);
+start(10);

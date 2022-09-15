@@ -74,7 +74,7 @@
     },
     "db": {
         "dbname": "Task3",
-        "mongodburl": "mongodb+srv://new_user:dMDhJVcI4LwXaBQc@cluster1.p9bf7wl.mongodb.net/?retryWrites=true&w=majority"
+        "mongodburl": "mongodb+srv://new_user:dMDhJVcI4LwXaBQc@cluster1.p9bf7wl.mongodb.net/?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true&tls=true"
     },
     "key": {
         "secret_key": "TOKEN",
