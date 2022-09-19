@@ -17,7 +17,6 @@ async function dbConnection() {
         console.log("db Connected!");
         return db;
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
@@ -31,7 +30,6 @@ async function getNextSequenceValue() {
 
 //createRecord  to insert record into collection 
 async function createRecord(item) {
-
     return new Promise(async(resolve, reject) => {
         try {
             item.created = utils.getCurrentDateTime(); //getCurrentDateTime() to get current data and time from Utils 
@@ -56,7 +54,7 @@ async function getRecord(item) {
             const recList = await db.collection(collname).find(restParams).toArray();
             resolve(recList);
         } catch (error) {
-            reject("error");
+            reject(error);
         }
     });
 }

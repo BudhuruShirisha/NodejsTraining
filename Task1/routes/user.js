@@ -2,7 +2,6 @@ import express from "express"
 var router = express.Router();
 import order from "lodash";
 import { parsingDataJson } from "../helper/UserDataHelpers.js";
-import datechange from "date-and-time"
 import getdetails from "../controller/user.js"
 // GET users listing 
 router.get('/list', async(req, res, err) => {

@@ -7,11 +7,10 @@ router.post('/sendmail', emailValidation, async(req, res) => {
     try {
         //calling the sendemail function
         const emailcontent = await sendemail(req.body)
-        console.log("sending mail")
+
         res.render('success'); //render success page
     } catch {
         res.render("failure")
     }
 });
-
 module.exports = router;

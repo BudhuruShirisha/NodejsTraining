@@ -16,6 +16,7 @@ class Utils {
     getFileContent(path) {
             // Read content from the file
             const fileContent = fs.readFileSync(path);
+
             return fileContent;
         }
         //get organizationid from rectype

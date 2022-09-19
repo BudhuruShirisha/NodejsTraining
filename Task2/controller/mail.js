@@ -33,7 +33,6 @@ function sendemail(params) {
     //using the sendMail method provided by the transporter object 
     const mail = new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (error, info) => {
-            console.log("hi")
             if (error) {
                 reject(error);
             } else {

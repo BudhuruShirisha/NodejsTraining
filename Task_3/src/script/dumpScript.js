@@ -10,7 +10,6 @@ async function getOrganizationrecord() {
         const orgRecordInfo = await axios.get(api + "organization/get");
         const orgRecordData = orgRecordInfo.data.results;
         return orgRecordData;
-
     } catch (error) {
         console.log(error);
     }
@@ -21,12 +20,12 @@ async function getOrganizationnameandid() {
     try {
 
         const orgRec = await getOrganizationrecord();
-        const list = [];
+        const orgInfo = {};
         orgRec.map((userObj) => {
             const { name, id } = userObj;
-            list.push({ name, id });
+            orgInfo[id] = name;
         })
-        return list;
+        return orgInfo;
     } catch (error) {
         console.log(error);
     }
@@ -69,7 +68,7 @@ function parsecontactData(contactInfo) {
         console.log(err)
     }
 }
-
+//get dumpparams
 function getDumpParams() {
     return new Promise(async(resolve, reject) => {
         try {
@@ -77,8 +76,7 @@ function getDumpParams() {
             const contactdata = parsecontactData(contactData)
             const dumpParams = patientInfo.map(async(userObj) => {
                 const { orgid, id, title, firstname, lastname, age, dob, gender } = userObj;
-                const Data = orgData.find(x => x.id === orgid)
-                const officename = Data.name;
+                const officename = orgData[orgid];
                 if (!contactdata[id]) throw "contact not found "
                 const { address: { line1, line2, city, state, zip }, email, phone } = contactdata[id];
                 addressparams = line1 + "," + line2 + "," + city + "," + state + "," + zip;

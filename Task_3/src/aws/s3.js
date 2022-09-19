@@ -19,7 +19,7 @@ async function uploadFile(file) {
         const uploadinfo = await s3.upload(params).promise();
         return uploadinfo;
     } catch (err) {
-        console.log(err.message)
+        throw err;
     }
 }
 
