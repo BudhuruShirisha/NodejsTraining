@@ -54,16 +54,11 @@ function authValidation(req, res, next) {
 }
 async function setAuth(payload) {
     try {
-
         const { refid, refrectype, data } = payload;
         data.password = utils.MD5(data.password);
-
         const userParams = { rectype: refrectype, id: refid, status: config.common.status.active }
-
         const userInfo = await getRecord(userParams);
-
         if (!userInfo.length) { throw "invalid/inactive user"; }
-
         const { orgid } = userInfo[0];
         payload.orgid = orgid;
         payload.rectype = config.authenticate.rectype;
@@ -91,7 +86,7 @@ async function validateAuth(payload) {
         const userParams = { rectype: refrectype, id: refid, status: config.common.status.active }
         const userInfo = await getRecord(userParams);
         const { orgid, id, firstname, lastname } = userInfo[0];
-        const tokenParams = { id, orgid, firstname, lastname, username }
+        const tokenParams = { userid: id, orgid, firstname, lastname, username }
         const token = utils.jwtToken(tokenParams);
         utils.verifyJwtToken(token);
         const tokenparams = { token, refid, refrectype }

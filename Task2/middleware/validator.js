@@ -5,8 +5,7 @@ function emailValidation(req, res, next) {
         body: { to },
     } = req;
     if (emailvalidator.validate(to)) {
-        console.log("if block")
-            // navigate to next middleware function
+        // navigate to next middleware function
         next();
     } else {
         console.log("else block")

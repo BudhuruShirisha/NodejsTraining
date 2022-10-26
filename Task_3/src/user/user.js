@@ -4,6 +4,11 @@ const config = require("../config/app.sepc.json")
 const User = new Schema({
     rectype: { type: String },
     orgid: { type: String },
+    offices: {
+        type: Array,
+        each: { type: String },
+
+    },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     gender: { type: String, enum: config.common.gender, required: true },
@@ -21,6 +26,7 @@ async function Validation(req, res, next) {
             orgid,
             firstname,
             lastname,
+
             gender,
             dob,
             status,
@@ -34,6 +40,7 @@ async function Validation(req, res, next) {
         orgid,
         firstname,
         lastname,
+
         gender,
         dob,
         status,

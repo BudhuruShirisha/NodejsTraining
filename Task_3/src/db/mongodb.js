@@ -48,6 +48,7 @@ async function createRecord(item) {
 async function getRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
+
             const { rectype, ...restParams } = item; // rectype and restparams to get data from collections
             const db = await dbConnection();
             const collname = rectype;

@@ -99,7 +99,6 @@ async function addFile(req, res) {
             const orgid = await utils.getRecOrgId(orgparams);
             addpayload.orgid = orgid;
         }
-
         const fileContent = utils.getFileContent(filepath);
         const filedata = { filename: originalname, fileContent };
         // upload file into s3bucket
@@ -121,7 +120,6 @@ async function Filedelete(req, res) {
         const payload = query;
         payload.rectype = config.file.rectype;
         const originalname = await utils.getoriginalname(payload);
-
         const datainfo = deleteFile(originalname);
         const data = await deleteRecord(payload); // deleterecord from mongodb 
         res.status(200).json({ status: "Success", results: data }); //success  if record is successfully deleted

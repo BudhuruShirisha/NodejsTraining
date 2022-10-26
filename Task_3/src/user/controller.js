@@ -37,7 +37,7 @@ async function updateRec(req, res) {
         const payload = query;
         payload.rectype = config.user.rectype;
         payload.body = req.body;
-        await utils.validateDob(payload.body.dob);
+        utils.validateDob(payload.body.dob);
         const userInfo = await updateRecord(payload);
         res.status(200).json({ status: "Success", results: userInfo });
     } catch (error) {

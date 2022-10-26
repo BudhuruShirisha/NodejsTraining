@@ -104,9 +104,19 @@ class Utils {
             throw err;
         }
     }
+    validatedatainrecord(params) {
+        const {
+            modeldata,
+            data,
+        } = params;
+        let recdata = {};
+        Object.keys(modeldata).forEach((element) => {
+            if (data.hasOwnProperty(element))
+                recdata[element] = data[element];
+        })
 
-
-
+        return recdata;
+    }
 }
 
 module.exports = { Utils };

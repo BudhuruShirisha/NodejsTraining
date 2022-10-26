@@ -14,7 +14,6 @@ const patient = new Schema({
     language: {
         type: String,
         enum: config.patient.language,
-
     },
     status: { type: String, enum: [config.common.status.active, config.common.status.inactive] },
     inactivereason: { type: String },

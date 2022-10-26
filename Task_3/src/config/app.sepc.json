@@ -84,5 +84,21 @@
     "token": {
         "rectype": "token",
         "refrectype": ["user"]
+    },
+    "records": {
+        "rectype": "records",
+        "type": {
+            "medication": "medication",
+            "diagnosis": "diagnosis"
+        },
+        "medicationdata": ["encdate", "name", "notes"],
+        "diagnosisdata": ["startdate", "enddate"]
+    },
+    "recordmodels": {
+        "rectype": "recordmodels"
+
+    },
+    "activitylog": {
+        "rectype": "activitylog"
     }
 }

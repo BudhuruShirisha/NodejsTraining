@@ -17,11 +17,13 @@ async function authenticateJWT(req, res, next) {
             return res.status(401).send("Unauthorized request, Enter Token!");
 
         const userData = utils.verifyJwtToken(token);
-        const tokenParams = { rectype: config.token.rectype, refid: userData.id };
+        const tokenParams = { rectype: config.token.rectype, refid: userData.userid };
         const tokenRecord = await getRecord(tokenParams);
         //verify the token with token record data
+
         if (tokenRecord.length) {
             const { refid, token: recordToken } = tokenRecord[0];
+
             if (token != recordToken) throw error;
             const userParams = {
                 rectype: config.user.rectype,

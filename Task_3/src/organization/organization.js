@@ -19,7 +19,7 @@ const officeSchema = new Schema({
         enum: [config.common.status.active, config.common.status.inactive],
         required: true,
     },
-
+    parentorganizationid: { type: String, required: true },
     inactivereason: {
         type: String,
     },

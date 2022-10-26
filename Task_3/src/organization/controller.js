@@ -8,11 +8,12 @@ const {
 const { Utils } = require("../common/utils");
 const utils = new Utils();
 //createRec the organization record
-async function createRec(req, res) {
+async function createRec(req, res, next) {
     try {
         req.body.rectype = config.organization.rectype;
         const orginfo = await createRecord(req.body);
         res.status(200).json({ status: "Success", results: orginfo });
+        next();
     } catch (error) {
         res.status(400).json({ status: "Error :", error: error });
     }

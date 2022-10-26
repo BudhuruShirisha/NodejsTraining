@@ -5,8 +5,8 @@ let config = {
     secure: false,
     requireTLS: true,
     auth: {
-        user: 'budhurushirisha97@gmail.com',
-        pass: 'tyzperabwdjeljqx'
+        user: 'crreddy8790@gmail.com',
+        pass: 'nxpyldjexhkzcotc'
     }
 }
 module.exports = config

@@ -1,6 +1,6 @@
 import express from "express";
 import userRouter from "./routes/user.js"
-var app = express();
+const app = express();
 //middleware to use express json for parsing the data
 app.use(express.json());
 

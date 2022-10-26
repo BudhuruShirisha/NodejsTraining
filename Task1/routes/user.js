@@ -4,7 +4,7 @@ import order from "lodash";
 import { parsingDataJson } from "../helper/UserDataHelpers.js";
 import getdetails from "../controller/user.js"
 // GET users listing 
-router.get('/list', async(req, res, err) => {
+router.get('/list', async(req, res) => {
 
     const count = req.query.count || 10;
 
@@ -21,7 +21,6 @@ router.get('/list', async(req, res, err) => {
     } else
     //error if count is more than 50
         res.status(400).json({ status: 'Error', message: 'users must be less than 50' });
-
 });
 
 export default router;
