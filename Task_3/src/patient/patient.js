@@ -19,7 +19,8 @@ const patient = new Schema({
     inactivereason: { type: String },
     dateinactivate: { type: String },
     created: { type: Date },
-    createdby: { type: String }
+    createdby: { type: String },
+    data: {}
 });
 
 function Validation(req, res, next) {
@@ -62,6 +63,7 @@ function Validation(req, res, next) {
     let errors = patient.validate(patientData);
     if (errors.length) {
         errors = errors.map((eRec) => {
+
             return { path: eRec.path, message: eRec.message };
         });
         res.send(errors);

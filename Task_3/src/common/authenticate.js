@@ -26,9 +26,7 @@ const authenticate = new Schema({
             type: String,
             required: true
         },
-
     }
-
 });
 //validate 
 function authValidation(req, res, next) {
@@ -96,5 +94,4 @@ async function validateAuth(payload) {
         throw err;
     }
 }
-
 module.exports = { authValidation, setAuth, validateAuth }

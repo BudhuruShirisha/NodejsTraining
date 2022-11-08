@@ -100,5 +100,23 @@
     },
     "activitylog": {
         "rectype": "activitylog"
+    },
+    "readings": {
+        "rectype": "readings",
+        "type": ["bp", "glucose", "pulse", "oxygen", "weight"],
+        "units": {
+            "bp": "mmhg",
+            "glucose": "mg/dl",
+            "pulse": "beats/minute",
+            "oxygen": " %",
+            "weight": "lbs"
+        }
+    },
+    "alert": {
+        "rectype": "alerts",
+        "systolic": "systolic",
+        "diastolic": "diastolic"
+
     }
+
 }

@@ -6,7 +6,7 @@ const s3 = new AWS.S3({
     secretAccessKey: config.aws.SECRET_ACCESS_KEY,
 });
 
-//uploadFile  to upload file into aws s3 bucket
+//upload file into aws s3 bucket
 async function uploadFile(file) {
     try {
         const { filename, fileContent } = file;

@@ -55,7 +55,8 @@ async function addAddress(contactBody) {
         if (type != contactType.address) throw "invalid type";
         if (![subType.home, subType.work].includes(subtype)) throw "invalid subtype";
         const orgparams = { rectype: refrectype, id: refid };
-        await getRecord(orgparams) //getRecord is to check record is available or not
+        const orgdata = await getRecord(orgparams) //getRecord is to check record is available or not
+        if (!orgdata.length) throw "invalid organization"
         const params = {
             address,
             checkaddress: config.contact.address
@@ -117,8 +118,8 @@ async function addEmail(contactBody) {
         if (![subType.primary, subType.secondary].includes(subtype)) throw "invalid subtype";
 
         const orgparams = { rectype: refrectype, id: refid };
-        await getRecord(orgparams);
-
+        const orgdata = await getRecord(orgparams);
+        if (!orgdata.length) throw "invalid organization"
         utils.emailValidation(email);
         if (refrectype == config.patient.rectype) {
             const orgid = await utils.getRecOrgId(orgparams);
@@ -167,8 +168,9 @@ async function addPhone(contactBody) {
         if (![subType.mobile, subType.personal].includes(subtype)) throw "invalid subtype";
         const orgparams = { rectype: refrectype, id: refid };
 
-        await getRecord(orgparams);
-        //   utils.validatephone(data);
+        const orgdata = await getRecord(orgparams);
+        if (!orgdata.length) throw "invalid organization"
+            //   utils.validatephone(data);
         if (refrectype == config.patient.rectype) {
             const orgid = await utils.getRecOrgId(orgparams);
             contactBody.orgid = orgid;
@@ -214,7 +216,8 @@ async function addFax(contactBody) {
         if (type != contactType.fax) throw "invalid type enter email";
         if (![subType.home, subType.work].includes(subtype)) throw "invalid subtype";
         const orgparams = { rectype: refrectype, id: refid };
-        await getRecord(orgparams);
+        const orgdata = await getRecord(orgparams);
+        if (!orgdata.length) throw "invalid organization"
         utils.validateFax(data);
         if (refrectype == config.patient.rectype) {
             const orgid = await utils.getRecOrgId(orgparams);
@@ -265,7 +268,6 @@ async function getcontactRec(req, res) {
 }
 // processfun to perform action based on appropriate method
 function processFun(__action) {
-
     const functionMapping = {
         "addAddress": addAddress,
         "updateAddress": updateAddress,
@@ -279,14 +281,12 @@ function processFun(__action) {
         "addFax": addFax,
         "updateFax": updateFax,
         "removeFax": removeFax
-
     };
     if (__action in functionMapping) {
         return functionMapping[__action];
     } else {
         throw "Invalid __action!";
     }
-
 }
 
 module.exports = {

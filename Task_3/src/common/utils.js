@@ -97,13 +97,14 @@ class Utils {
         return gentoken;
     }
     verifyJwtToken(token) {
-        try {
-            const decoded = jwt.verify(token, config.key.secret_key);
-            return decoded;
-        } catch (err) {
-            throw err;
+            try {
+                const decoded = jwt.verify(token, config.key.secret_key);
+                return decoded;
+            } catch (err) {
+                throw err;
+            }
         }
-    }
+        //validate data in modeldata 
     validatedatainrecord(params) {
         const {
             modeldata,
@@ -117,6 +118,27 @@ class Utils {
 
         return recdata;
     }
-}
 
+    //get flag, limitDiff, otherdata 
+    getFlaglLimitDiff(params) {
+        const { min, max, value } = params;
+        if (Number(value) < Number(min) || Number(value) > Number(max)) {
+            const data = {};
+            if (Number(value) < Number(min)) {
+                data.flag = "Below Minimum";
+                data.limitDiff = min - value;
+            } else {
+                data.flag = "Over Maximum";
+                data.limitDiff = value - max;
+            }
+            data.otherdata = {
+                actualvalue: value,
+                min,
+                max,
+            };
+            return data;
+        }
+        return false
+    }
+}
 module.exports = { Utils };

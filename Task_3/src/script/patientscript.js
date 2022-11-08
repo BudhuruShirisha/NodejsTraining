@@ -15,7 +15,6 @@ async function getUserData(count) {
         console.log(error);
     }
 }
-
 // parsing random user data
 function parsingData(params) {
     const {
@@ -43,6 +42,7 @@ function parsingData(params) {
         patient: { gender, firstname, lastname, title, dob, age, },
         contact: { address, email, phone }
     };
+
     return responseData;
 }
 
@@ -73,7 +73,6 @@ async function getOrganizationRandomId() {
         console.log(error);
     }
 }
-
 // create patient record 
 async function createPatient(patientParams, token) {
     try {
@@ -85,6 +84,8 @@ async function createPatient(patientParams, token) {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
+        console.log(patientRecord.data.results)
+            //  console.log(patientRecord.data.results)
         return patientRecord.data.results;
     } catch (error) {
         console.log(error);
@@ -141,12 +142,11 @@ async function start(count) {
         userData.forEach((userObj) => {
             userList.push(parsingData(userObj));
         });
-        const size = 1;
+        const size = 2;
         const token = await getToken();
         const patientPromises = userList.map((userRecord) => {
             return processRecords(userRecord, token);
         });
-
         for (i = 0; i < patientPromises.length; i = i + size) {
             const recordData = patientPromises.slice(i, i + size);
             Promise.all(recordData).then((result) => {

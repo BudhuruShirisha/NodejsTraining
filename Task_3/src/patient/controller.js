@@ -7,7 +7,7 @@ const {
 } = require("../db/mongodb");
 
 const { Utils } = require("../common/utils");
-const { off, listen } = require("../../routers/patient");
+
 const utils = new Utils();
 //creating the patient record 
 async function createRec(req, res) {
@@ -32,20 +32,20 @@ async function createRec(req, res) {
 //getRec is to get the patient record
 async function getRec(req, res) {
     try {
-        const { query, session: { userid } } = req;
+
+        const { query, } = req;
         const payload = query;
         payload.rectype = config.patient.rectype;
+
         const patientInfo = await getRecord(payload);
-        const officedata = await offices(userid)
-        console.log(officedata)
+        /* const officedata = await offices(userid)
         const patientlist = [];
-        patientInfo.map(async(element) => {
+        patientInfo.map((element) => {
             const { orgid } = element;
             if (officedata.includes(orgid))
                 patientlist.push(element)
-        })
-        console.log(patientlist)
-        res.status(200).json({ status: "Success", results: patientlist });
+        }) */
+        res.status(200).json({ status: "Success", results: patientInfo });
     } catch (error) {
         res.status(400).json({ status: "Error :", error: error });
     }
@@ -176,11 +176,47 @@ async function checkOffices(params) {
     }
 }
 
+async function updatedeviceRec(req, res) {
+    try {
+        const { body: { id, data: { devices } } } = req;
+        const payload = { id, rectype: config.patient.rectype, body: { data: { devices } } }
+
+        const patientparams = { id, rectype: config.patient.rectype, }
+        const recdata = await getRecord(patientparams);
+
+        if (!recdata.length) throw `${rectype} record not found!`;
+        if (recdata[0].data) {
+            let { devices: recdevices } = recdata[0].data;
+            if (recdevices) {
+                Object.keys(recdevices).forEach((element) => {
+                    if (devices[element])
+                        console.log("ERfrfr", devices[element])
+                    recdevices[element] = devices[element];
+                    console.log("device", recdevices[element])
+                })
+
+                Object.keys(devices).forEach((element) => {
+                    if (devices[element])
+                        recdevices[element] = devices[element];
+                });
+                payload.body.data.devices = devices;
+            }
+        }
+
+        // const patientInfo = await updateRecord(payload);
+        //res.status(200).json({ status: "Success", results: patientInfo });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ status: "Error :", error: error });
+    }
+}
+
 //exporting functions
 module.exports = {
     createRec,
     getRec,
     updateRec,
     deleteRec,
-    getpatientdetails
+    getpatientdetails,
+    updatedeviceRec
 };

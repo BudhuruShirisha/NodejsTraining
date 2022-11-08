@@ -46,6 +46,7 @@ async function createRecord(item) {
 
 //getRecord  to get data from collection
 async function getRecord(item) {
+
     return new Promise(async(resolve, reject) => {
         try {
 
@@ -53,8 +54,13 @@ async function getRecord(item) {
             const db = await dbConnection();
             const collname = rectype;
             const recList = await db.collection(collname).find(restParams).toArray();
+            /*  const recList = await db.collection(collname).aggregate([{ $match: { lastname: "Lima" } },
+
+             ]).toArray()*/
+            // console.log(recList)
             resolve(recList);
         } catch (error) {
+            console.log(error)
             reject(error);
         }
     });
@@ -62,6 +68,7 @@ async function getRecord(item) {
 
 //updateRecord  to update the record from collection
 async function updateRecord(item) {
+    console.log(item)
     return new Promise(async(resolve, reject) => {
         try {
             const { rectype, id, body } = item;
@@ -82,6 +89,7 @@ async function updateRecord(item) {
 async function deleteRecord(item) {
     return new Promise(async(resolve, reject) => {
         try {
+            console.log(item)
             const { rectype, id } = item;
             const db = await dbConnection();
             const collname = rectype;

@@ -74,11 +74,11 @@ async function getOrganizationnameandid(users) {
             const { name, id } = userObj;
             existingOffices[name] = id;
         });
+
         const officestocreate = [];
         users.map((userObj) => {
             const { officename } = userObj;
             if (!existingOffices[officename] && !officestocreate.includes(officename)) officestocreate.push(officename);
-
         });
         const officePromises = officestocreate.map((name) => {
             return createOrganizationRecord(name);
