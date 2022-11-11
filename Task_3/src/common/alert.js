@@ -31,7 +31,7 @@ function validation(params) {
 // generate alerts from reading data
 async function generateAlert(readingsobject) {
     try {
-        const { id, refid, type, data: { effectiveDateTime, component, valueQuantity }, } = readingsobject;
+        const { id, refid, type, effectiveDateTime, data: { component, valueQuantity }, } = readingsobject;
         validation(readingsobject)
         const patientparams = { id: refid, rectype: config.patient.rectype }
         const patientRecord = await getRecord(patientparams)
@@ -40,62 +40,23 @@ async function generateAlert(readingsobject) {
             orgid,
             data: { devices }
         } = patientRecord[0];
-        if (config.readings.type[0] == type) {
 
+        const devicetype = [];
+        if (config.readings.type[0] == type) {
+            devicetype.push({ type: config.alert.systolic, min: sys.min, max: sys.max, value: value1 })
+            devicetype.push({ type: config.alert.diastolic, min: dia.min, max: dia.max, value: value2 })
             const { bp: { sys, dia } } = devices;
             const [{ valueQuantity: { value: value1 } }, { valueQuantity: { value: value2 } }] = component;
-
-            //checking systolic data
-            const sysparams = { value: value1, min: sys.min, max: sys.max }
-            datavalues = utils.getFlaglLimitDiff(sysparams);
-            if (datavalues) {
-
-                const { flag, limitDiff, otherdata } = datavalues;
-                let alertparams = {
-                    refid,
-                    orgid,
-                    refrectype: config.patient.rectype,
-                    data: {
-                        isaddressed: "false",
-                        timestamp: effectiveDateTime,
-                        flag,
-                        limitDiff,
-                        otherdata,
-                        readingrefid: id,
-                        type: config.alert.systolic
-                    }
-                }
-                await create(alertparams)
-
-            }
-            const diaparams = { value: value2, min: dia.min, max: dia.max }
-            datavalues = utils.getFlaglLimitDiff(diaparams);
-            if (datavalues) {
-                const { flag, limitDiff, otherdata } = datavalues;
-                const alertparams = {
-                    refid,
-                    orgid,
-                    refrectype: config.patient.rectype,
-                    data: {
-                        isaddressed: "false",
-                        timestamp: effectiveDateTime,
-                        flag,
-                        limitDiff,
-                        otherdata,
-                        readingrefid: id,
-                        type: config.alert.diastolic
-                    }
-                }
-                await create(alertparams)
-
-            }
         } else {
-
             const { value } = valueQuantity
             const { min, max } = devices[type];
+            devicetype.push({ type, min, max, value })
+        }
+        for (let i = 0; i < devicetype.length; i++) {
+            const { type, min, max, value } = devicetype[i]
             const params = { value, min, max }
             datavalues = utils.getFlaglLimitDiff(params);
-            if (datavalues) {
+            if (datavalues.flag) {
                 const { flag, limitDiff, otherdata } = datavalues;
                 const alertparams = {
                     refid,
@@ -141,6 +102,25 @@ async function remove(readingsobject) {
         await deleteRecord(alertParams);
     }
 }
+async function getAlertsRecord(req, res) {
+    try {
 
+        const { query: { refid, startdate, enddate } } = req;
+        const payload = { refid, rectype: config.alert.rectype }
+        const readingsrec = await getRecord(payload)
+        let arr = [];
+        readingsrec.map((element) => {
+            const { data: { timestamp } } = element;
+            console.log(timestamp, startdate, enddate)
+            if (startdate < timestamp && timestamp < enddate) {
+                arr.push(element)
+            }
+        })
+        console.log(arr)
+        res.status(200).json({ status: "success:", results: arr })
+    } catch (error) {
+        res.status(400).json({ status: "Error:", error: error })
+    }
+}
 
-module.exports = { generateAlert, remove }
+module.exports = { generateAlert, remove, getAlertsRecord }

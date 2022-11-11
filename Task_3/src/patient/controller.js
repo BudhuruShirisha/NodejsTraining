@@ -175,7 +175,6 @@ async function checkOffices(params) {
         throw err;
     }
 }
-
 async function updatedeviceRec(req, res) {
     try {
         const { body: { id, data: { devices } } } = req;
@@ -185,28 +184,19 @@ async function updatedeviceRec(req, res) {
         const recdata = await getRecord(patientparams);
 
         if (!recdata.length) throw `${rectype} record not found!`;
-        if (recdata[0].data) {
-            let { devices: recdevices } = recdata[0].data;
+        const { data } = recdata[0]
+        if (data) {
+            let { devices: recdevices } = data;
             if (recdevices) {
-                Object.keys(recdevices).forEach((element) => {
-                    if (devices[element])
-                        console.log("ERfrfr", devices[element])
-                    recdevices[element] = devices[element];
-                    console.log("device", recdevices[element])
-                })
-
-                Object.keys(devices).forEach((element) => {
-                    if (devices[element])
-                        recdevices[element] = devices[element];
-                });
-                payload.body.data.devices = devices;
+                const newdevices = {...recdevices, ...devices }
+                payload.body.data.devices = newdevices;
             }
         }
-
-        // const patientInfo = await updateRecord(payload);
-        //res.status(200).json({ status: "Success", results: patientInfo });
+        //console.log(payload)
+        const patientInfo = await updateRecord(payload);
+        res.status(200).json({ status: "Success", results: patientInfo });
     } catch (error) {
-        console.log(error)
+
         res.status(400).json({ status: "Error :", error: error });
     }
 }

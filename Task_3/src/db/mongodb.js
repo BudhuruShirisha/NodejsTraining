@@ -49,7 +49,7 @@ async function getRecord(item) {
 
     return new Promise(async(resolve, reject) => {
         try {
-
+            console.log(item)
             const { rectype, ...restParams } = item; // rectype and restparams to get data from collections
             const db = await dbConnection();
             const collname = rectype;
@@ -57,7 +57,7 @@ async function getRecord(item) {
             /*  const recList = await db.collection(collname).aggregate([{ $match: { lastname: "Lima" } },
 
              ]).toArray()*/
-            // console.log(recList)
+            //console.log(recList)
             resolve(recList);
         } catch (error) {
             console.log(error)
@@ -75,9 +75,10 @@ async function updateRecord(item) {
             const db = await dbConnection();
             const collname = rectype;
             const newRec = await db.collection(collname).updateOne({ id: id }, { $set: body });
-            if (!newRec.modifiedCount) {
+
+            /* if (!newRec.modifiedCount) {
                 throw `Record is Not Found!`;
-            }
+            } */
             resolve(item);
         } catch (error) {
             reject(error);

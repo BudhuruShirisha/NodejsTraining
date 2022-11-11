@@ -13,7 +13,8 @@ const {
     getpatientdetails,
     updatedeviceRec
 } = require("../src/patient/controller");
-const { create, remove } = require("../src/common/readings")
+const { create, remove, getReadingsRecord } = require("../src/common/readings")
+const { getAlertsRecord } = require("../src/common/alert")
 const { activity } = require("../src/user/activities")
 const { authenticateJWT } = require("../src/middleware/middleware");
 const { addrecord } = require("../src/common/records");
@@ -42,6 +43,8 @@ router.post("/records/", addrecord)
 
 router.post("/createreadings", create)
 router.delete("/remove/", remove)
+router.get("/readings", getReadingsRecord)
+router.get("/alerts", getAlertsRecord)
 
 
 module.exports = router;
